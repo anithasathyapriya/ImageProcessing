@@ -1,0 +1,31 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="myCustomMenuTextApearance" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+    </style>
+
+    <style name="Seperator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_alignBottom">@id/toolbar</item>
+        <item name="android:background">@color/light_color</item>
+    </style>
+
+
+
+
+    <style name="ProgressBar.Horizontal" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+    </style>
+
+
+
+</resources>

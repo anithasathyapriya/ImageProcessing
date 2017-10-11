@@ -92,6 +92,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 return (a);
             }
 
+            @Override
             protected void onPostExecute(JSONArray result) {
                 Bitmap bng = null;
                 GridImageClass c = new GridImageClass();
@@ -138,11 +139,11 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
 
       @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(getApplicationContext(), i + "selected", Toast.LENGTH_LONG).show();
+
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
-        intent.putExtra("fName",fol);
-        intent.putExtra("Index",i);
-        intent.putExtra("count", bitmapNames.size());
+        intent.putExtra("iName",bitmapNames.get(i));
+       // intent.putExtra("Index",i);
+        //intent.putExtra("count", bitmapNames.size());
         startActivity(intent);
         finish();
     }

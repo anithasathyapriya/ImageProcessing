@@ -10,4 +10,5 @@ public class GridImageClass {
 
     public String name;
     public Bitmap img;
+    public String relevance;
 }

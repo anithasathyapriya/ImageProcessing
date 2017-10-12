@@ -60,7 +60,6 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
             convertView=inflater.inflate(R.layout.grid_layout,null);}
 
         ImageView img=(ImageView) convertView.findViewById(R.id.imageView2);//for displaying image
-        ImageView imgview4=(ImageView) convertView.findViewById(R.id.imageView4);//for displaying color code
         img.setImageBitmap(GetImagesFromCache(mcontext, list.get(position)));
 
 
@@ -83,8 +82,6 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
             else
                 iconColor = Color.RED;
         }
-
-        imgview4.setBackgroundColor(iconColor);
         return  convertView;
     }
 

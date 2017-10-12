@@ -21,7 +21,7 @@ public class ImageDetails extends AppCompatActivity {
 
     final static String host = "http://10.217.138.174/EventTraceWebAppV1/Service1.svc/viewImage";
     public Bitmap bitmapimage;
-    String name,imgDec,relevance,favourite;
+    String name,imgDec,relevance,favourite, folder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class ImageDetails extends AppCompatActivity {
         setContentView(R.layout.activity_image_details);
         Bundle b = getIntent().getExtras();
         final String imgName= b.get("iName").toString();
+        folder = b.get("Id").toString();
         Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
         TextView tv=(TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText(""+imgName);
@@ -65,28 +66,15 @@ public class ImageDetails extends AppCompatActivity {
                     Log.i("JSON", e.getMessage());
                 }
             }
-
-          /*  @Override
-            public boolean onKeyDown(int keyCode, KeyEvent event)  {
-                if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
-                        && keyCode == KeyEvent.KEYCODE_BACK
-                        && event.getRepeatCount() == 0) {
-                    Log.d("CDA", "onKeyDown Called");
-                    onBackPressed();
-                    return true;
-                }
-                return super.onKeyDown(keyCode, event);
-            }*/
-
-
-
-            public   void onBackPressed(){
-                Log.i( "onBackPressed: ","");
-                Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
-                startActivity(intent);
-                return;
-            }
-
         }.execute();
+    }
+
+    @Override
+    public   void onBackPressed(){
+        Log.i( "onBackPressed: ","");
+        Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+        intent.putExtra("Id", folder);
+        startActivity(intent);
+        return;
     }
 }

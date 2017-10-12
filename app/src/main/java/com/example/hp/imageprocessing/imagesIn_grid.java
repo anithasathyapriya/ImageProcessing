@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -142,6 +143,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
 
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
         intent.putExtra("iName",bitmapNames.get(i));
+          intent.putExtra("Id",fol);
        // intent.putExtra("Index",i);
         //intent.putExtra("count", bitmapNames.size());
         startActivity(intent);
@@ -155,6 +157,15 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 file.delete();
             }
         }
+    }
+
+    @Override
+    public   void onBackPressed(){
+        Log.i( "onBackPressed: ","");
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        //intent.putExtra("Id", folder);
+        startActivity(intent);
+        return;
     }
 }
 

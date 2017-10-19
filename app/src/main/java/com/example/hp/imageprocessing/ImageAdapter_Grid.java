@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by HP on 4/10/2017.
@@ -64,21 +65,9 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
 
 
         //setting the color based on face value
-        if(list.get(position).indexOf("cf") > 0)
-        {
+       if(list.get(position).relevance.compareTo("Max")== 0)
+               iconColor = Color.GREEN;
 
-            int start = list.get(position).lastIndexOf("cf") +  2;
-            String text = list.get(position).substring(start, start+6);
-            Log.i("Substring",text);
-            String newText = text.replace("%", ".");
-            Log.i("text",newText);
-            double value = Double.parseDouble(newText);
-            Log.i("value",String.valueOf(value));
-
-            if(value>=0.0070)
-                iconColor = Color.GREEN;
-            else if((value<0.0070)&&(value>=0.0030))
-                iconColor = Color.YELLOW;
             else
                 iconColor = Color.RED;
         }

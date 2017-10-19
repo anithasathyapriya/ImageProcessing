@@ -21,7 +21,7 @@ public class ImageDetails extends AppCompatActivity {
 
     final static String host = "http://10.217.138.174/EventTraceWebAppV1/Service1.svc/viewImage";
     public Bitmap bitmapimage;
-    String name,imgDec,relevance,favourite, folder;
+    String name,imgDec,relevance,favourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,6 @@ public class ImageDetails extends AppCompatActivity {
         setContentView(R.layout.activity_image_details);
         Bundle b = getIntent().getExtras();
         final String imgName= b.get("iName").toString();
-        folder = b.get("Id").toString();
         Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
         TextView tv=(TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText(""+imgName);
@@ -67,8 +66,127 @@ public class ImageDetails extends AppCompatActivity {
                 }
             }
         }.execute();
-    }
 
+        // Code for Relevant button
+        Button bi=(Button) findViewById(R.id.btnIrrelevant);
+        bi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        JSONParser.getJSONFromUrl(host + "/UpdateRelevance/" + imgName);
+
+                        runOnUiThread(new Runnable(){
+
+                            @Override
+                            public void run(){
+                                Toast.makeText(getApplicationContext(),"Relevance Flag Updated",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
+                        intent.putExtra("iName",imgName);
+                        startActivity(intent);
+                    }
+                }.execute();
+            }
+        });
+        // For Favourite button
+        Button btf=(Button)findViewById(R.id.btnFavourite);
+        btf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        JSONParser.getJSONFromUrl(host + "/UpdateFavourite" + imgName);
+
+                        runOnUiThread(new Runnable(){
+
+                            @Override
+                            public void run(){
+                                Toast.makeText(getApplicationContext(),"Image marked as Favourote",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
+                        intent.putExtra("iName",imgName);
+                        startActivity(intent);
+                    }
+                }.execute();
+
+            }
+        });
+
+        // Action for Delete button
+
+        Button btd=(Button)findViewById(R.id.btnDelete);
+        btd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        JSONParser.getJSONFromUrl(host + "/DeleteImage/" + imgName);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Image Deleted", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }.execute();
+                Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+                intent.putExtra("Id",fname);
+                startActivity(intent);
+            }
+        });
+
+        //for Updating the comments
+        Button btu=(Button)findViewById(R.id.btnUpdate);
+        btu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText e=(EditText)findViewById(R.id.etComment);
+                final String comment=e.getText().toString();
+                new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        JSONParser.getJSONFromUrl(host + "/UpdateComment/" + imgName+"/"+comment);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Comments added", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+                        intent.putExtra("iName",imgName);
+                        startActivity(intent);
+                    }
+                }.execute();
+            }
+        });
+
+    }
     @Override
     public   void onBackPressed(){
         Log.i( "onBackPressed: ","");
@@ -76,5 +194,4 @@ public class ImageDetails extends AppCompatActivity {
         intent.putExtra("Id", folder);
         startActivity(intent);
         return;
-    }
 }

@@ -3,6 +3,8 @@ package com.example.hp.imageprocessing;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
@@ -53,6 +60,7 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
         Date d=null;
         Date d2=null;
         String datestring=null;
+        ArrayList<String> imageViews = new ArrayList<>();
 
         LayoutInflater inflater=(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView==null)
@@ -64,6 +72,9 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
             holder.imageView1 = (ImageView) convertView.findViewById(R.id.imageView1);
             holder.imageView2 = (ImageView) convertView.findViewById(R.id.imageView2);
             holder.imageView3 = (ImageView) convertView.findViewById(R.id.imageView3);
+            imageViews.add("imageView1");
+            imageViews.add("imageView2");
+            imageViews.add("imageView3");
             convertView.setTag(holder);
         }
         else
@@ -95,27 +106,51 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
         else
              holder.txtDate.setText(""+datestring);
 
-
-
-
-        if(rowItem.getImg().size()==3){
-            holder.imageView1.setImageBitmap(rowItem.getImg().get(0));
-            holder.imageView2.setImageBitmap(rowItem.getImg().get(1));
-            holder.imageView3.setImageBitmap(rowItem.getImg().get(2));
+        if(rowItem.getIndexes().size()==3){
+            holder.imageView1.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(0)));
+            holder.imageView2.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(1)));
+            holder.imageView3.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(2)));
         }
         else if (rowItem.getImg().size()==2){
-            holder.imageView1.setImageBitmap(rowItem.getImg().get(0));
-            holder.imageView2.setImageBitmap(rowItem.getImg().get(1));
+            holder.imageView1.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(0)));
+            holder.imageView2.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(1)));
             holder.imageView3.setImageBitmap(null);
 
         }
         else {
-            holder.imageView1.setImageBitmap(rowItem.getImg().get(0));
+            holder.imageView1.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(0)));
             holder.imageView2.setImageBitmap(null);
             holder.imageView3.setImageBitmap(null);
         }
-
         return convertView;
+    }
+
+    public Bitmap GetImagesFromCache(Context c, String folder, String index) {
+        BufferedReader input = null;
+        File file = null, f = null;
+        try {
+            f = new File(c.getCacheDir(), folder); // Pass getFilesDir() and "MyFile" to read file
+            file = new File(f, index);
+
+            input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = input.readLine()) != null) {
+                buffer.append(line);
+            }
+            String i = buffer.toString();
+            try {
+                byte[] encodeByte = Base64.decode(i, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                return bitmap;
+            } catch (Exception e) {
+                e.getMessage();
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
  }

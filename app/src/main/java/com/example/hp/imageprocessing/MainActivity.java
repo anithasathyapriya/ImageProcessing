@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Toolbar tb;
     private ProgressBar pb;
     ListView listview;
-    final static String host = "http://10.217.138.174/EventTraceWebAppV1/Service1.svc/ThreeImages";
+    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/ThreeImages";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     by[k] = (byte) (((int) jByte.get(k)) & 0xFF);
                                 }
                                 bng = BitmapFactory.decodeByteArray(by, 0, by.length);
-                               c.img.add(bng);
+                                c.indexes.add(i);
+                                saveImages(c.name, String.valueOf(i), bng);
                             }
                         } catch (Exception e) { }
                         list.add(c);
@@ -132,8 +133,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int res_id = item.getItemId();
         if (res_id == R.id.action_search)
             Toast.makeText(getApplicationContext(),item+"selected",Toast.LENGTH_LONG).show();
-
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void saveImages(String folder, String imgIndex, Bitmap bng){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bng.compress(Bitmap.CompressFormat.JPEG,100, baos);
+        byte[] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        File file;
+        FileOutputStream outputStream;
+        try {
+            file = new File(getApplicationContext().getCacheDir(),folder);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            File f = new File(file, imgIndex);
+            if (f.exists()) {
+                f.delete();
+            }
+            outputStream = new FileOutputStream(f);
+            outputStream.write(temp.getBytes());
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

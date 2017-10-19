@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.hp.imageprocessing.R.drawable.gridimageborder;
+
 /**
  * Created by HP on 4/10/2017.
  */
@@ -27,9 +30,9 @@ import java.util.List;
 public class ImageAdapter_Grid  extends  BaseAdapter{
 
     Context mcontext;
-    ArrayList<String> list = new ArrayList<String>();
+    ArrayList<GridImageClass> list = new ArrayList<GridImageClass>();
 
-    public ImageAdapter_Grid(Context c , ArrayList<String> l)
+    public ImageAdapter_Grid(Context c , ArrayList<GridImageClass> l)
     {
         mcontext=c;
         list=l;
@@ -54,23 +57,22 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        int iconColor = Color.GREEN;
         if(convertView==null)
         {
             LayoutInflater inflater=(LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.grid_layout,null);}
+            convertView=inflater.inflate(R.layout.grid_layout,null);
+        }
 
         ImageView img=(ImageView) convertView.findViewById(R.id.imageView2);//for displaying image
-        img.setImageBitmap(GetImagesFromCache(mcontext, list.get(position)));
-
+        img.setImageBitmap(GetImagesFromCache(mcontext, list.get(position).name));
+        GradientDrawable drawable = (GradientDrawable)img.getBackground();
 
         //setting the color based on face value
        if(list.get(position).relevance.compareTo("Max")== 0)
-               iconColor = Color.GREEN;
+           drawable.setStroke(6, Color.GREEN);
+       else
+           drawable.setStroke(6, Color.RED);
 
-            else
-                iconColor = Color.RED;
-        }
         return  convertView;
     }
 

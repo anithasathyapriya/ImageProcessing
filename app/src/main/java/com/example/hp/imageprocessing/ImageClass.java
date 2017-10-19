@@ -12,9 +12,11 @@ public class ImageClass {
 
     public String name;
     public ArrayList<Bitmap> img;
+    public ArrayList<Integer> indexes;
 
     public ImageClass(){
         img = new ArrayList<Bitmap>();
+        indexes = new ArrayList<>();
     }
 
 
@@ -29,6 +31,12 @@ public class ImageClass {
     }
     public void  setImg(ArrayList<Bitmap> img){
         this.img=img;
+    }
+    public ArrayList<Integer> getIndexes(){
+        return this.indexes;
+    }
+    public void  setIndexes(ArrayList<Integer> i){
+        this.indexes=i;
     }
 }
 

@@ -39,19 +39,15 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    final static String host = "http://10.217.138.174/EventTraceWebAppV1/Service1.svc/folderImages";
+    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/folderImages";
 
-    public ArrayList<String> bitmapNames = new ArrayList<String>();
-    public List<GridImageClass> bitmapclass;
+    //public ArrayList<String> bitmapNames = new ArrayList<String>();
+    public ArrayList<GridImageClass> bitmapclass;
     GridView gv;
     String name;
     String fol;
     private  ProgressBar pb;
-
-
-
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_in_grid);
@@ -140,13 +136,13 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
         intent.putExtra("iName",bitmapclass.get(i).name);
-        intent.putExtra("iName",bitmapNames.get(i));
+        //intent.putExtra("iName",bitmapNames.get(i));
           intent.putExtra("Id",fol);
        // intent.putExtra("Index",i);
         //intent.putExtra("count", bitmapNames.size());
         startActivity(intent);
-
     }
+
     // clear the cache memory
     public void clear() {
         File[] directory = getCacheDir().listFiles();

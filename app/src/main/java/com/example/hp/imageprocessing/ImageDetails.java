@@ -91,6 +91,7 @@ public class ImageDetails extends AppCompatActivity {
                             }
                         });
                         return null;
+                        //dummy
                     }
                 }.execute();
             }

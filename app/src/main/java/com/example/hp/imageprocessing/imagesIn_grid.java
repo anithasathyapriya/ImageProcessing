@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,10 +56,11 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         TextView tv=(TextView) tb.findViewById(R.id.toolbar_title);
         String datestring=null;
         Date d=null;
-        pb=(ProgressBar) findViewById(R.id.progressBar2);
+        pb=(ProgressBar) findViewById(R.id.progressbar2);
         final Bundle b = getIntent().getExtras();
         final String folder = b.get("Id").toString();
         fol = folder;
+
         //displaying the selected date as Title of Toolbar
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         try{
@@ -67,10 +69,24 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             datestring = sdf.format(d);
         }catch(Exception e){}
         tv.setText(""+ datestring);
-        tb.setTitleTextColor(Color.BLACK);
+        tv.setTextColor(Color.BLACK);
         clear();
 
+        // setting back button in the toolbar
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        tb.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //intent.putExtra("Id", folder);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         new AsyncTask<Void, Void, JSONArray>() {
             //progress bar activation
@@ -131,17 +147,34 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             }
         }.execute();
     }
-
+    // for  click event of one image in grid view
       @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
         intent.putExtra("iName",bitmapclass.get(i).name);
         //intent.putExtra("iName",bitmapNames.get(i));
-          intent.putExtra("Id",fol);
-       // intent.putExtra("Index",i);
-        //intent.putExtra("count", bitmapNames.size());
+        intent.putExtra("Id",fol);
         startActivity(intent);
     }
+
+    //adding "select" to toolbar as a menu item
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.grid_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        int res_id = item.getItemId();
+        if (res_id == R.id.action_select)
+        {
+            Toast.makeText(getApplicationContext(),"select  pressed   ",Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     // clear the cache memory
     public void clear() {
@@ -152,10 +185,10 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             }
         }
     }
-
+        //action for mobile back button pressed
     @Override
     public   void onBackPressed(){
-        Log.i( "onBackPressed: ","");
+        Log.i( "onBackPressed : ","");
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         //intent.putExtra("Id", folder);
         startActivity(intent);

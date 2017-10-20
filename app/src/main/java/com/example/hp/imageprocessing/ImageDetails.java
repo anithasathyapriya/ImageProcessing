@@ -1,6 +1,5 @@
 package com.example.hp.imageprocessing;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,14 +34,32 @@ public class ImageDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_details);
         Bundle b = getIntent().getExtras();
-        final String imgName= b.get("iName").toString();
+        final String imgName = b.get("iName").toString();
         folder = b.get("Id").toString();
-        Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
-        TextView tv=(TextView) tb.findViewById(R.id.toolbar_title);
-        tv.setText(""+imgName);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
+        tv.setText("" + imgName);
         tv.setTextColor(Color.BLACK);
 
-            //Display selected  image
+        // back button in the application
+
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        tb.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Id", folder);
+                startActivity(intent);
+                //finish();
+            }
+        });
+
+
+        //Display selected  image
         new AsyncTask<Void, Void, JSONObject>() {
 
             @Override
@@ -53,9 +72,9 @@ public class ImageDetails extends AppCompatActivity {
             protected void onPostExecute(JSONObject a) {
                 try {
                     name = a.getString("imgName");
-                    imgDec=a.getString("imgDec");
-                    relevance=a.getString("relevance");
-                    favourite=a.getString("favourite");
+                    imgDec = a.getString("imgDec");
+                    relevance = a.getString("relevance");
+                    favourite = a.getString("favourite");
                     JSONArray img = a.getJSONArray("image");
                     byte[] by = new byte[img.length()];
                     for (int i = 0; i < img.length(); i++) {
@@ -63,18 +82,21 @@ public class ImageDetails extends AppCompatActivity {
                     }
                     bitmapimage = BitmapFactory.decodeByteArray(by, 0, by.length);
                     ImageView imgVIew = (ImageView) findViewById(R.id.imageDetail);
+                    imgVIew.setVisibility(View.VISIBLE);
                     EditText tv = (EditText) findViewById(R.id.etComment);
                     imgVIew.setImageBitmap(bitmapimage);
-                    //if(imgDec.isEmpty())
-                    tv.setText(imgDec);
+                    tv.setText((""));
+                    if (imgDec.compareTo("null") != 0)
+                        tv.setText(imgDec);
                 } catch (JSONException e) {
                     Log.i("JSON", e.getMessage());
                 }
             }
         }.execute();
 
+
         // Code for Relevant button
-        Button bi=(Button) findViewById(R.id.btnIrrelevant);
+        Button bi = (Button) findViewById(R.id.btnIrrelevant);
         bi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,11 +105,11 @@ public class ImageDetails extends AppCompatActivity {
                     protected Void doInBackground(String... params) {
                         JSONParser.getJSONFromUrl(host + "/UpdateRelevance/" + imgName);
 
-                        runOnUiThread(new Runnable(){
+                        runOnUiThread(new Runnable() {
 
                             @Override
-                            public void run(){
-                                Toast.makeText(getApplicationContext(),"Relevance Flag Updated",Toast.LENGTH_LONG).show();
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Relevance Flag Updated", Toast.LENGTH_LONG).show();
                             }
                         });
                         return null;
@@ -97,7 +119,7 @@ public class ImageDetails extends AppCompatActivity {
             }
         });
         // For Favourite button
-        Button btf=(Button)findViewById(R.id.btnFavourite);
+        Button btf = (Button) findViewById(R.id.btnFavourite);
         btf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,11 +128,11 @@ public class ImageDetails extends AppCompatActivity {
                     protected Void doInBackground(String... params) {
                         JSONParser.getJSONFromUrl(host + "/UpdateFavourite/" + imgName);
 
-                        runOnUiThread(new Runnable(){
+                        runOnUiThread(new Runnable() {
 
                             @Override
-                            public void run(){
-                                Toast.makeText(getApplicationContext(),"Image marked as Favourote",Toast.LENGTH_LONG).show();
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Image marked as Favourote", Toast.LENGTH_LONG).show();
                             }
                         });
                         return null;
@@ -122,7 +144,7 @@ public class ImageDetails extends AppCompatActivity {
 
         // Action for Delete button
 
-        Button btd=(Button)findViewById(R.id.btnDelete);
+        Button btd = (Button) findViewById(R.id.btnDelete);
         btd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,9 +163,9 @@ public class ImageDetails extends AppCompatActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        Intent intent = new Intent(ImageDetails.this,imagesIn_grid.class);
+                        Intent intent = new Intent(ImageDetails.this, imagesIn_grid.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Id",folder);
+                        intent.putExtra("Id", folder);
                         startActivity(intent);
                         //((Activity)getApplicationContext()).finish();
                     }
@@ -153,28 +175,54 @@ public class ImageDetails extends AppCompatActivity {
         });
 
         //for Updating the comments
-        Button btu=(Button)findViewById(R.id.btnUpdate);
+        Button btu = (Button) findViewById(R.id.btnUpdate);
         btu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText e=(EditText)findViewById(R.id.etComment);
-                final String comment=e.getText().toString();
+                EditText e = (EditText) findViewById(R.id.etComment);
+                final String comment = e.getText().toString();
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        JSONParser.getJSONFromUrl(host + "/UpdateComment/" + imgName+"/"+comment);
+                        JSONParser.getJSONFromUrl(host + "/UpdateComment/" + imgName + "/" + comment);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(getApplicationContext(), "Comments added", Toast.LENGTH_LONG).show();
+
                             }
                         });
                         return null;
+
                     }
                 }.execute();
+                e.setText("");
             }
         });
+
     }
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.imagedetails_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(android.view.MenuItem item) {
+            int res_id = item.getItemId();
+            if (res_id == R.id.action_Home)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+
+    // code for mobile back button press
     @Override
     public  void onBackPressed() {
         Log.i("onBackPressed: ", "");

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.example.hp.imageprocessing.R.id.bottomtoolbar;
 import static com.example.hp.imageprocessing.R.id.progressbar;
 import static com.example.hp.imageprocessing.R.id.toolbar;
 
@@ -48,6 +50,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     String name;
     String fol;
     private  ProgressBar pb;
+    ArrayList<String> bitmapnames=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +149,19 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 pb.setVisibility(View.INVISIBLE);
             }
         }.execute();
+        Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
+        ImageView  iv=(ImageView) tool.findViewById(R.id.imgDelete);
+        iv.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapnames.isEmpty()){
+
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+            }
+
+        });
+
     }
     // for  click event of one image in grid view
       @Override
@@ -171,6 +187,8 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         if (res_id == R.id.action_select)
         {
             Toast.makeText(getApplicationContext(),"select  pressed   ",Toast.LENGTH_LONG).show();
+             Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
+            tool.setVisibility(View.VISIBLE);
         }
         return super.onOptionsItemSelected(item);
     }

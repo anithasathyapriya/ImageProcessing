@@ -69,9 +69,9 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
 
         //setting the color based on face value
        if(list.get(position).relevance.compareTo("Max")== 0)
-           drawable.setStroke(6, Color.GREEN);
+           drawable.setStroke(8, Color.GREEN);
        else
-           drawable.setStroke(6, Color.RED);
+           drawable.setStroke(8, Color.RED);
 
         return  convertView;
     }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomtoolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/imgDelete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:src="@drawable/deleteicon" />
+
+    <ImageView
+        android:id="@+id/imgHeart"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:src="@drawable/hearttransparent1" />
+
+    <ImageView
+        android:id="@+id/imgRelavant"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="left"
+        android:clickable="true"
+        android:src="@drawable/relevanticon" />
+
+    <!--<ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/hearttransparent1"/>
+
+    <ImageButton
+        style="@android:style/Widget.DeviceDefault.ImageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/hearttransparent1" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="left"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/relevanticon" />
+-->
+</android.support.v7.widget.Toolbar>

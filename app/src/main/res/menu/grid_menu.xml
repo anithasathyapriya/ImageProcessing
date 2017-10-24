@@ -6,8 +6,8 @@
         android:title="select"
         app:showAsAction="always"/>
 
-   <!-- <item android:id="@+id/action_cancel"
+    <item android:id="@+id/action_cancel"
         android:title="cancel"
-        app:showAsAction="never"/>-->
+        app:showAsAction="always"/>
 
 </menu>

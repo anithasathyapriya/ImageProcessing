@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,10 +45,14 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
 
     //public ArrayList<String> bitmapNames = new ArrayList<String>();
     public ArrayList<GridImageClass> bitmapclass;
-    GridView gv;
+    public GridView gv;
     String name;
     String fol;
     private  ProgressBar pb;
+    public ArrayList<String> bitmapNames;
+    boolean selected = false;
+    MenuItem itemCancel;
+    MenuItem itemSelect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         final Bundle b = getIntent().getExtras();
         final String folder = b.get("Id").toString();
         fol = folder;
+
 
         //displaying the selected date as Title of Toolbar
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -142,6 +148,8 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 gv = (GridView) findViewById(R.id.gridview1);
                 ImageAdapter_Grid adapter = new ImageAdapter_Grid(imagesIn_grid.this, bitmapclass);
                 gv.setAdapter(adapter);
+                //gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+                //gv.setMultiChoiceModeListener(new MultiSelectGridViewListener());
                 gv.setOnItemClickListener(imagesIn_grid.this);
                 pb.setVisibility(View.INVISIBLE);
             }
@@ -162,7 +170,23 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.grid_menu, menu);
+        itemCancel = menu.findItem(R.id.action_cancel);
+        itemSelect = menu.findItem(R.id.action_select);
+        itemCancel.setVisible(false);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        if(selected){
+            itemSelect.setVisible(false);
+            itemCancel.setVisible(true);
+        }
+        else{
+            itemSelect.setVisible(true);
+            itemCancel.setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -170,7 +194,33 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         int res_id = item.getItemId();
         if (res_id == R.id.action_select)
         {
-            Toast.makeText(getApplicationContext(),"select  pressed   ",Toast.LENGTH_LONG).show();
+            selected  = true;
+            //OnPrepareOptionsMenu(selected);
+            invalidateOptionsMenu();
+            bitmapNames = new ArrayList<>();
+            //final ImageAdapter_Grid adapter = (ImageAdapter_Grid) gv.getAdapter();
+            gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    //Toast.makeText(getApplicationContext(),"select  pressed "+i ,Toast.LENGTH_LONG).show();
+                    if(!bitmapNames.contains(bitmapclass.get(i).name)) {
+                        bitmapNames.add(bitmapclass.get(i).name);
+                        ((CheckableGridView) view).selectImages();
+                    }
+                    else{
+                        bitmapNames.remove(bitmapclass.get(i).name);
+                        ((CheckableGridView) view).unSelectImages(bitmapclass.get(i).relevance);
+                    }
+
+                }
+            }
+
+        );
+        }
+        else if(res_id == R.id.action_cancel){
+            selected  = false;
+            invalidateOptionsMenu();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -194,5 +244,40 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
         return;
     }
+
+
+//    public class MultiSelectGridViewListener implements
+//            GridView.MultiChoiceModeListener {
+//        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//            mode.setTitle("Select Items");
+//            mode.setSubtitle("One item selected");
+//            return true;
+//        }
+//
+//        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//            return true;
+//        }
+//
+//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//            return true;
+//        }
+//
+//        public void onDestroyActionMode(ActionMode mode) {
+//        }
+//
+//        public void onItemCheckedStateChanged(ActionMode mode, int position,
+//                                              long id, boolean checked) {
+//            int selectCount = gv.getCheckedItemCount();
+//            switch (selectCount) {
+//                case 1:
+//                    mode.setSubtitle("One item selected");
+//                    break;
+//                default:
+//                    mode.setSubtitle("" + selectCount + " items selected");
+//                    break;
+//            }
+//        }
+//
+//    }
 }
 

@@ -57,24 +57,31 @@ public class ImageAdapter_Grid  extends  BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        CheckableGridView c;
         if(convertView==null)
         {
-            LayoutInflater inflater=(LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.grid_layout,null);
+            //LayoutInflater inflater=(LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            c = new CheckableGridView(mcontext);
+            //convertView=inflater.inflate(R.layout.grid_layout,null);
         }
+        else{
+           c = (CheckableGridView) convertView;
+        }
+        c.display(list.get(position));
 
-        ImageView img=(ImageView) convertView.findViewById(R.id.imageView2);//for displaying image
-        img.setImageBitmap(GetImagesFromCache(mcontext, list.get(position).name));
-        GradientDrawable drawable = (GradientDrawable)img.getBackground();
+//        ImageView img=(ImageView) c.findViewById(R.id.imageView2);//for displaying image
+//        img.setImageBitmap(GetImagesFromCache(mcontext, list.get(position).name));
+//        GradientDrawable drawable = (GradientDrawable)img.getBackground();
+//
+//        //setting the color based on face value
+//       if(list.get(position).relevance.compareTo("Max")== 0)
+//           drawable.setStroke(6, Color.GREEN);
+//       else
+//           drawable.setStroke(6, Color.RED);
 
-        //setting the color based on face value
-       if(list.get(position).relevance.compareTo("Max")== 0)
-           drawable.setStroke(6, Color.GREEN);
-       else
-           drawable.setStroke(6, Color.RED);
-
-        return  convertView;
+        return  c;
     }
+
 
     // Getting the image from the cache memory
     public Bitmap GetImagesFromCache(Context c, String imgName){

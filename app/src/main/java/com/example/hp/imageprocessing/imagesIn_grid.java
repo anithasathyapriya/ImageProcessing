@@ -157,25 +157,20 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             }
         }.execute();
         Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
-        ImageView  iv=(ImageView) tool.findViewById(R.id.imgDelete);
-
+        ImageView  ivDel=(ImageView) tool.findViewById(R.id.imgDelete);
         // code for Delete button in Grid view
-
-        iv.setOnClickListener(new View.OnClickListener(){
+        ivDel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (bitmapNames.isEmpty()){
-
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
                     StringBuffer names = new StringBuffer();
-
                     for (String s:bitmapNames) {
-                        names.append(s+",");
+                        names.append(s+"__");
                     }
                     final String imgNames = names.toString();
-
                     new AsyncTask<Void, Void, String>() {
                         //progress bar activation
                         @Override
@@ -184,14 +179,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                             pb.setProgress(0);
                             pb.setIndeterminate(true);
                         }
-
                         @Override
                         //  getting all images in the folder
                         protected String doInBackground(Void... params) {
                             String a = JSONParser.postStream(host + "DeleteSelected", imgNames);
                             return (a);
                         }
-
                         @Override
                         protected void onPostExecute(String result) {
                             Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
@@ -202,7 +195,86 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     }.execute();
                 }
             }
+        });
 
+        ImageView  ivFav=(ImageView) tool.findViewById(R.id.imgHeart);
+        // code for Delete button in Grid view
+        ivFav.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapNames.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    StringBuffer names = new StringBuffer();
+                    for (String s:bitmapNames) {
+                        names.append(s+"__");
+                    }
+                    final String imgNames = names.toString();
+                    new AsyncTask<Void, Void, String>() {
+                        //progress bar activation
+                        @Override
+                        protected void onPreExecute() {
+                            pb.setVisibility(View.VISIBLE);
+                            pb.setProgress(0);
+                            pb.setIndeterminate(true);
+                        }
+                        @Override
+                        //  getting all images in the folder
+                        protected String doInBackground(Void... params) {
+                            String a = JSONParser.postStream(host + "MakeFavourite", imgNames);
+                            return (a);
+                        }
+                        @Override
+                        protected void onPostExecute(String result) {
+                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("Id", folder);
+                            startActivity(intent);
+                        }
+                    }.execute();
+                }
+            }
+        });
+
+        ImageView  ivRel=(ImageView) tool.findViewById(R.id.imgRelavant);
+        // code for Delete button in Grid view
+        ivRel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapNames.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    StringBuffer names = new StringBuffer();
+                    for (String s:bitmapNames) {
+                        names.append(s+"__");
+                    }
+                    final String imgNames = names.toString();
+                    new AsyncTask<Void, Void, String>() {
+                        //progress bar activation
+                        @Override
+                        protected void onPreExecute() {
+                            pb.setVisibility(View.VISIBLE);
+                            pb.setProgress(0);
+                            pb.setIndeterminate(true);
+                        }
+                        @Override
+                        //  getting all images in the folder
+                        protected String doInBackground(Void... params) {
+                            String a = JSONParser.postStream(host + "ChangeRelavance", imgNames);
+                            return (a);
+                        }
+                        @Override
+                        protected void onPostExecute(String result) {
+                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("Id", folder);
+                            startActivity(intent);
+                        }
+                    }.execute();
+                }
+            }
         });
 
     }

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +44,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/folderImages";
+    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/";
 
     //public ArrayList<String> bitmapNames = new ArrayList<String>();
     public ArrayList<GridImageClass> bitmapclass;
@@ -55,6 +56,9 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     boolean selected = false;
     MenuItem itemCancel;
     MenuItem itemSelect;
+    Toolbar tool;
+    private Menu menu;
+    ImageAdapter_Grid adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +111,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             @Override
             //  getting all images in the folder
             protected JSONArray doInBackground(Void... params) {
-                JSONArray a = JSONParser.getJSONArrayFromUrl(host + "/" + folder);
+                JSONArray a = JSONParser.getJSONArrayFromUrl(host + "folderImages"+"/" + folder);
                 return (a);
             }
             @Override
@@ -148,22 +152,54 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 } catch (Exception e) {
                 }
                 gv = (GridView) findViewById(R.id.gridview1);
-                ImageAdapter_Grid adapter = new ImageAdapter_Grid(imagesIn_grid.this, bitmapclass);
+                adapter = new ImageAdapter_Grid(imagesIn_grid.this, bitmapclass);
                 gv.setAdapter(adapter);
-                //gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
-                //gv.setMultiChoiceModeListener(new MultiSelectGridViewListener());
                 gv.setOnItemClickListener(imagesIn_grid.this);
                 pb.setVisibility(View.INVISIBLE);
             }
         }.execute();
         Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
         ImageView  iv=(ImageView) tool.findViewById(R.id.imgDelete);
+
+        // code for Delete button in Grid view
+
         iv.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (bitmapnames.isEmpty()){
+                if (bitmapNames.isEmpty()){
 
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    final String [] imgNames = bitmapNames.toArray(new String[bitmapNames.size()]);
+                    final JSONObject imageNamesJSON = new JSONObject();
+                    try {
+                        imageNamesJSON.put("ImageNames", imgNames);
+                    }
+                    catch (Exception E){
+                        Toast.makeText(getApplicationContext(),"Sorry la, Error",Toast.LENGTH_LONG).show();
+                    }
+
+                    new AsyncTask<Void, Void, String>() {
+                        //progress bar activation
+                        @Override
+                        protected void onPreExecute() {
+                            pb.setVisibility(View.VISIBLE);
+                            pb.setProgress(0);
+                            pb.setIndeterminate(true);
+                        }
+
+                        @Override
+                        //  getting all images in the folder
+                        protected String doInBackground(Void... params) {
+                            String a = JSONParser.postStream(host + "/DeleteSelected", imageNamesJSON.toString());
+                            return (a);
+                        }
+
+                        @Override
+                        protected void onPostExecute(String result) {
+                        }
+                    }.execute();
                 }
             }
 
@@ -210,8 +246,10 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         if (res_id == R.id.action_select)
         {
             selected  = true;
-            Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
+            tool = (Toolbar) findViewById(R.id.bottomtoolbar);
             tool.setVisibility(View.VISIBLE);
+           /* MenuItem  menuItem = menu.findItem(R.id.action_select);
+            menuItem.setTitle("Cancel");*/
             //OnPrepareOptionsMenu(selected);
             invalidateOptionsMenu();
             bitmapNames = new ArrayList<>();
@@ -229,7 +267,6 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                         bitmapNames.remove(bitmapclass.get(i).name);
                         ((CheckableGridView) view).unSelectImages(bitmapclass.get(i).relevance);
                     }
-
                 }
             }
 
@@ -238,6 +275,11 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         else if(res_id == R.id.action_cancel){
             selected  = false;
             invalidateOptionsMenu();
+            tool.setVisibility(View.INVISIBLE);
+            //gv.setAdapter(adapter);
+            //gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+            //gv.setMultiChoiceModeListener(new MultiSelectGridViewListener());
+            //gv.setOnItemClickListener(imagesIn_grid.this);
             //Toast.makeText(getApplicationContext(),"select  pressed   ",Toast.LENGTH_LONG).show();
 
         }

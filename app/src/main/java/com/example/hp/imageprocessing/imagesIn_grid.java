@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -59,13 +60,15 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     Toolbar tool;
     private Menu menu;
     ImageAdapter_Grid adapter;
+    String datestring=null;
+    TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_in_grid);
         Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
-        TextView tv=(TextView) tb.findViewById(R.id.toolbar_title);
-        String datestring=null;
+        tv=(TextView) tb.findViewById(R.id.toolbar_title);
+        //String datestring=null;
         Date d=null;
         pb=(ProgressBar) findViewById(R.id.progressbar2);
         final Bundle b = getIntent().getExtras();
@@ -81,6 +84,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             datestring = sdf.format(d);
         }catch(Exception e){}
         tv.setText(""+ datestring);
+        name = datestring;
         tv.setTextColor(Color.BLACK);
         clear();
 
@@ -166,6 +170,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    final int countImages = bitmapNames.size();
                     StringBuffer names = new StringBuffer();
                     for (String s:bitmapNames) {
                         names.append(s+"__");
@@ -187,10 +192,24 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                         }
                         @Override
                         protected void onPostExecute(String result) {
-                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), countImages+" Images deleted", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                            final Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("Id", folder);
-                            startActivity(intent);
+
+                            (new Handler())
+                                    .postDelayed(
+                                            new Runnable() {
+                                                public void run() {
+                                                    startActivity(intent);
+                                                }
+                                            }, 2000);
                         }
                     }.execute();
                 }
@@ -206,6 +225,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    final int countImages = bitmapNames.size();
                     StringBuffer names = new StringBuffer();
                     for (String s:bitmapNames) {
                         names.append(s+"__");
@@ -213,12 +233,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     final String imgNames = names.toString();
                     new AsyncTask<Void, Void, String>() {
                         //progress bar activation
-                        @Override
-                        protected void onPreExecute() {
-                            pb.setVisibility(View.VISIBLE);
-                            pb.setProgress(0);
-                            pb.setIndeterminate(true);
-                        }
+//                        @Override
+//                        protected void onPreExecute() {
+//                            pb.setVisibility(View.VISIBLE);
+//                            pb.setProgress(0);
+//                            pb.setIndeterminate(true);
+//                        }
                         @Override
                         //  getting all images in the folder
                         protected String doInBackground(Void... params) {
@@ -227,10 +247,17 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                         }
                         @Override
                         protected void onPostExecute(String result) {
-                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("Id", folder);
-                            startActivity(intent);
+//                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            intent.putExtra("Id", folder);
+//                            startActivity(intent);
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), countImages+" Images added to favourites", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }.execute();
                 }
@@ -246,6 +273,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    final int countImages = bitmapNames.size();
                     StringBuffer names = new StringBuffer();
                     for (String s:bitmapNames) {
                         names.append(s+"__");
@@ -267,10 +295,22 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                         }
                         @Override
                         protected void onPostExecute(String result) {
-                            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), countImages+" Images marked", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            final Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("Id", folder);
-                            startActivity(intent);
+                            (new Handler())
+                                    .postDelayed(
+                                            new Runnable() {
+                                                public void run() {
+                                                    startActivity(intent);
+                                                }
+                                            }, 2000);
                         }
                     }.execute();
                 }
@@ -334,10 +374,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     if(!bitmapNames.contains(bitmapclass.get(i).name)) {
                         bitmapNames.add(bitmapclass.get(i).name);
                         ((CheckableGridView) view).selectImages();
+                        tv.setText(name+" "+bitmapNames.size()+" selected");
                     }
                     else{
                         bitmapNames.remove(bitmapclass.get(i).name);
                         ((CheckableGridView) view).unSelectImages(bitmapclass.get(i).relevance);
+                        tv.setText(name+" "+bitmapNames.size()+" selected");
                     }
                 }
             }
@@ -349,6 +391,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             invalidateOptionsMenu();
             tool.setVisibility(View.INVISIBLE);
             bitmapNames.clear();
+            tv.setText(name);
             setGridViewAdapter();
 
         }

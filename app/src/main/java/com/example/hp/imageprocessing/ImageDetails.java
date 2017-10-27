@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class ImageDetails extends AppCompatActivity {
         TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText("" + imgName);
         tv.setTextColor(Color.BLACK);
+        Spinner spinner=(Spinner) findViewById(R.id.categorySpinner);
+        spinner.setVisibility(View.INVISIBLE);
 
         // back button in the application
 

@@ -43,7 +43,7 @@ public class CheckableGridView extends FrameLayout {
 
     public void selectImages(){
         GradientDrawable drawable = (GradientDrawable) imgView.getBackground();
-        drawable.setStroke(6, Color.BLUE);
+        drawable.setStroke(24, Color.BLUE);
     }
 
     public void unSelectImages(String rel){

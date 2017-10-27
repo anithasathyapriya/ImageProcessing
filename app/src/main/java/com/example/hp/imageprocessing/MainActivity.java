@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,9 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private Toolbar tb;
     private ProgressBar pb;
+    Spinner spinner;
     ListView listview;
+    String Sitem;
     final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/ThreeImages";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +56,46 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         pb=(ProgressBar) findViewById(R.id.progressbar);
         String[] temp=new String[3];
 
+
          // setting the title
         TextView mTitle = (TextView) tb.findViewById(R.id.toolbar_title);
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mTitle.setText("My Moments");
+
+        spinner=(Spinner)findViewById(R.id.categorySpinner);
+        spinner.setSelection(-1);
+        //SpinnerClass(spinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+          @Override
+          public void onItemSelected(AdapterView adapter, View v, int i, long lng)
+          {
+              //Toast.makeText(getApplicationContext(), (CharSequence) spinner.getSelectedItem(), Toast.LENGTH_SHORT).show();
+              Sitem=(String) spinner.getSelectedItem();
+              if((Sitem.compareTo("Search By Date"))==0)
+              {
+                  Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                  startActivity(intent);
+              }
+
+
+              else if ((Sitem.compareTo("Search By Favourites"))==0)
+              {
+                    Intent intent= new  Intent(getApplicationContext(),imagesIn_grid.class);
+                    intent.putExtra("Id","Favourite");
+                    startActivity(intent);
+              }
+
+          }
+          @Override
+          public void onNothingSelected(AdapterView arg0)
+          {
+              Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
+          }
+        });
+
 
         //reading   first 3 images with date in all  available dates
         new AsyncTask<Void, Void, JSONArray>() {

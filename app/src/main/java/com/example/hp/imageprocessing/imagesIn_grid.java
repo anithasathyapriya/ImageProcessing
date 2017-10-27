@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/";
+ String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/";
 
     //public ArrayList<String> bitmapNames = new ArrayList<String>();
     public ArrayList<GridImageClass> bitmapclass;
@@ -74,25 +75,33 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         final Bundle b = getIntent().getExtras();
         final String folder = b.get("Id").toString();
         fol = folder;
-
-
-        //displaying the selected date as Title of Toolbar
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        try{
-             d = sdf.parse(fol);
-            sdf=new SimpleDateFormat("dd MMM");
-            datestring = sdf.format(d);
-        }catch(Exception e){}
-        tv.setText(""+ datestring);
-        name = datestring;
-        tv.setTextColor(Color.BLACK);
+        Spinner spinner=(Spinner) findViewById(R.id.categorySpinner);
+        spinner.setVisibility(View.INVISIBLE);
+        if (folder.compareTo("Favourite")==0)
+        {
+            host=host+"/GetFavourites";
+            tv.setText("My Favourites");
+        }
+        else {
+            host = host+ "folderImages/" + folder;
+            //displaying the selected date as Title of Toolbar
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            try {
+                d = sdf.parse(fol);
+                sdf = new SimpleDateFormat("dd MMM");
+                datestring = sdf.format(d);
+            } catch (Exception e) {
+            }
+            tv.setText("" + datestring);
+            name = datestring;
+            tv.setTextColor(Color.BLACK);
+        }
         clear();
 
         // setting back button in the toolbar
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         tb.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +124,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             @Override
             //  getting all images in the folder
             protected JSONArray doInBackground(Void... params) {
-                JSONArray a = JSONParser.getJSONArrayFromUrl(host + "folderImages"+"/" + folder);
+                JSONArray a = JSONParser.getJSONArrayFromUrl(host );
                 return (a);
             }
             @Override
@@ -203,13 +212,13 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("Id", folder);
 
-                            (new Handler())
+                            /*(new Handler())
                                     .postDelayed(
                                             new Runnable() {
                                                 public void run() {
                                                     startActivity(intent);
                                                 }
-                                            }, 2000);
+                                            }, 2000);*/
                         }
                     }.execute();
                 }
@@ -217,7 +226,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         });
 
         ImageView  ivFav=(ImageView) tool.findViewById(R.id.imgHeart);
-        // code for Delete button in Grid view
+        // code for Favourite button in Grid view
         ivFav.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -265,7 +274,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         });
 
         ImageView  ivRel=(ImageView) tool.findViewById(R.id.imgRelavant);
-        // code for Delete button in Grid view
+        // code for Relavance button in Grid view
         ivRel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -360,9 +369,6 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             selected  = true;
             tool = (Toolbar) findViewById(R.id.bottomtoolbar);
             tool.setVisibility(View.VISIBLE);
-           /* MenuItem  menuItem = menu.findItem(R.id.action_select);
-            menuItem.setTitle("Cancel");*/
-            //OnPrepareOptionsMenu(selected);
             invalidateOptionsMenu();
             bitmapNames = new ArrayList<>();
             //final ImageAdapter_Grid adapter = (ImageAdapter_Grid) gv.getAdapter();
@@ -374,12 +380,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     if(!bitmapNames.contains(bitmapclass.get(i).name)) {
                         bitmapNames.add(bitmapclass.get(i).name);
                         ((CheckableGridView) view).selectImages();
-                        tv.setText(name+" "+bitmapNames.size()+" selected");
+                        tv.setText(" "+bitmapNames.size()+" selected");
                     }
                     else{
                         bitmapNames.remove(bitmapclass.get(i).name);
                         ((CheckableGridView) view).unSelectImages(bitmapclass.get(i).relevance);
-                        tv.setText(name+" "+bitmapNames.size()+" selected");
+                        tv.setText(" "+bitmapNames.size()+" selected");
                     }
                 }
             }
@@ -393,7 +399,6 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             bitmapNames.clear();
             tv.setText(name);
             setGridViewAdapter();
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -423,5 +428,6 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         gv.setAdapter(adapter);
         gv.setOnItemClickListener(imagesIn_grid.this);
     }
+
 }
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.Preference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -45,7 +46,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner spinner;
     ListView listview;
     String Sitem;
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/ThreeImages";
+    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    String monthflag="false";
+    String selectedHost=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,16 +80,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
               Sitem=(String) spinner.getSelectedItem();
               if((Sitem.compareTo("Search By Date"))==0)
               {
-                  Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                  startActivity(intent);
+                  monthflag="false";
+                  selectedHost=host+"/ThreeImages";
+                  listview = (ListView)findViewById(R.id.listView1);
+                  SpinnerClass exe = new SpinnerClass(MainActivity.this, listview, pb, monthflag);
+                  exe.execute(selectedHost);
               }
 
-
+              else if ((Sitem.compareTo("Search By Month"))==0)
+               {
+                   monthflag="true";
+                   selectedHost=host+"/MonthImages";
+                   listview = (ListView)findViewById(R.id.listView1);
+                   SpinnerClass exe = new SpinnerClass(MainActivity.this, listview, pb, monthflag);
+                   exe.execute(selectedHost);
+                  /*Intent intent= new  Intent(getApplicationContext(),MainActivity.class);
+                  startActivity(intent);*/
+              }
               else if ((Sitem.compareTo("Search By Favourites"))==0)
               {
                     Intent intent= new  Intent(getApplicationContext(),imagesIn_grid.class);
                     intent.putExtra("Id","Favourite");
+                    intent.putExtra("flag","Favourite");
                     startActivity(intent);
+              }
+              else if ((Sitem.compareTo("Set Preference"))==0)
+              {
+                  Intent intent= new  Intent(getApplicationContext(),PreferencePage.class);
+                  startActivity(intent);
               }
 
           }
@@ -96,59 +118,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
           }
         });
 
+        // Default page loading(bY Date)monthflag="false";
 
-        //reading   first 3 images with date in all  available dates
-        new AsyncTask<Void, Void, JSONArray>() {
-            ImageClass c;
+        selectedHost=host+"/ThreeImages";
+        listview = (ListView)findViewById(R.id.listView1);
+        SpinnerClass exe = new SpinnerClass(MainActivity.this, listview, pb, monthflag);
+        exe.execute(selectedHost);
+        listview.setOnItemClickListener(MainActivity.this);
 
-            //progress bar activation
-            @Override
-            protected  void onPreExecute(){
-                pb.setVisibility(View.VISIBLE);
-                pb.setProgress(0);
-                pb.setIndeterminate(true);
-            }
-            @Override
-            protected JSONArray   doInBackground(Void... params) {
-                JSONArray a = JSONParser.getJSONArrayFromUrl(host );
-                return (a);
-            }
-
-            @Override
-            protected void onPostExecute(JSONArray result) {
-                Bitmap bng;
-                ListView listview;
-                ArrayList<ImageClass>list=new ArrayList<>();
-                try {
-                    for (int j = 0; j < result.length(); j++)
-                    {   c = new ImageClass();
-                        try {
-                            JSONArray a = result.getJSONObject(j).getJSONArray("images");
-                            String name = result.getJSONObject(j).getString("fNames");
-                            c.name = name;
-                            for (int i = 0; i < a.length(); i++) {
-                                JSONArray jByte = a.getJSONObject(i).getJSONArray("Data");
-                                byte[] by = new byte[jByte.length()];
-                                for (int k = 0; k < jByte.length(); k++) {
-                                    by[k] = (byte) (((int) jByte.get(k)) & 0xFF);
-                                }
-                                bng = BitmapFactory.decodeByteArray(by, 0, by.length);
-                                c.indexes.add(i);
-                                saveImages(c.name, String.valueOf(i), bng);
-                            }
-                        } catch (Exception e) { }
-                        list.add(c);
-                    }
-
-                } catch (Exception e) {  }
-
-                 ImageAdapter_List adapter = new ImageAdapter_List(MainActivity.this,R.layout.activity_main,list);
-                 listview=(ListView) findViewById(R.id.listView1);
-                 listview.setAdapter(adapter);
-                 listview.setOnItemClickListener(MainActivity.this);
-                 pb.setVisibility(View.INVISIBLE);
-            }
-        }.execute();
     }
 
     public void onItemClick(AdapterView<?> av, View v, int position, long id)
@@ -156,46 +133,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ImageClass item=(ImageClass) av.getItemAtPosition(position);
         Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
         intent.putExtra("Id",item.getName());
+        intent.putExtra("flag", monthflag);
         startActivity(intent);
 
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int res_id = item.getItemId();
-        if (res_id == R.id.action_search)
-            Toast.makeText(getApplicationContext(),item+"selected",Toast.LENGTH_LONG).show();
-        return super.onOptionsItemSelected(item);
-    }
 
-    public void saveImages(String folder, String imgIndex, Bitmap bng){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bng.compress(Bitmap.CompressFormat.JPEG,100, baos);
-        byte[] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        File file;
-        FileOutputStream outputStream;
-        try {
-            file = new File(getApplicationContext().getCacheDir(),folder);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            File f = new File(file, imgIndex);
-            if (f.exists()) {
-                f.delete();
-            }
-            outputStream = new FileOutputStream(f);
-            outputStream.write(temp.getBytes());
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
 }

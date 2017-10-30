@@ -28,7 +28,7 @@ public class ImageDetails extends AppCompatActivity {
 
     final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
-    String name,imgDec,relevance,favourite, folder;
+    String name,imgDec,relevance,favourite, folder, flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class ImageDetails extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         final String imgName = b.get("iName").toString();
         folder = b.get("Id").toString();
+        flag = b.get("flag").toString();
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText("" + imgName);
@@ -56,6 +57,7 @@ public class ImageDetails extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Id", folder);
+                intent.putExtra("flag", flag);
                 startActivity(intent);
                 //finish();
             }

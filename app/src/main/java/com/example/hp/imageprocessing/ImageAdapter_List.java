@@ -39,12 +39,14 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
     Context context;
     int layoutResourceId;
     List<ImageClass> data= Collections.emptyList();
+    String flag;
 
-    public ImageAdapter_List(Context contextl ,int resourceId, ArrayList<ImageClass> items)
+    public ImageAdapter_List(Context contextl ,int resourceId, ArrayList<ImageClass> items,String flag)
     {super(contextl, resourceId,items );
         context=contextl;
         layoutResourceId=resourceId;
         data=items;
+        this.flag=flag;
     }
 
     private class ViewHolder {
@@ -81,30 +83,51 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
             holder = (ViewHolder) convertView.getTag();
 
         ImageClass rowItem = data.get(position);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        try{
-            d = sdf.parse(rowItem.getName());
-            sdf=new SimpleDateFormat("dd MMM yyyy");
-            datestring = sdf.format(d);
-            d2=sdf.parse(datestring);
 
-        }catch(Exception e){}
+        //displaying  the month as Title for each row
+        if(flag.compareTo("true")==0)
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMM");
+            try {
+                d = sdf1.parse(rowItem.getName());
+                sdf1 = new SimpleDateFormat("MMM yyyy");
+                datestring = sdf1.format(d);
+                holder.txtDate.setText(" " + datestring);
 
-        Calendar d1 = Calendar.getInstance();
-        String s  = sdf.format( d1.getTime());
-        Date s1=new Date();
-        try{
-        s1=sdf.parse(s);}
-        catch (Exception e){}
-       /* if (datestring.compareTo(s)==0)
-            holder.txtDate.setText("Today");*/
-        int diff=(int)(s1.getTime()-d2.getTime())/(1000 * 60 * 60 * 24);
-        if(diff==0)
-            holder.txtDate.setText("Today");
-        else if(diff==1)
-            holder.txtDate.setText("Yesterday");
+            } catch (Exception e) {
+            }
+        }
+
+        // displaying the date as itile for each row
         else
-             holder.txtDate.setText(""+datestring);
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            try {
+                d = sdf.parse(rowItem.getName());
+                sdf = new SimpleDateFormat("dd MMM yyyy");
+                datestring = sdf.format(d);
+                d2 = sdf.parse(datestring);
+
+            } catch (Exception e) {
+            }
+
+            Calendar d1 = Calendar.getInstance();
+            String s = sdf.format(d1.getTime());
+            Date s1 = new Date();
+            try {
+                s1 = sdf.parse(s);
+            } catch (Exception e) {
+            }
+
+            int diff = (int) (s1.getTime() - d2.getTime()) / (1000 * 60 * 60 * 24);
+            if (diff == 0)
+                holder.txtDate.setText("Today");
+            else if (diff == 1)
+                holder.txtDate.setText("Yesterday");
+            else
+                holder.txtDate.setText("" + datestring);
+        }
+
 
         if(rowItem.getIndexes().size()==3){
             holder.imageView1.setImageBitmap(GetImagesFromCache(context, rowItem.getName(), String.valueOf(0)));

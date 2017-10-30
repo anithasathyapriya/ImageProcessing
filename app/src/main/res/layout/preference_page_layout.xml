@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context="com.example.hp.imageprocessing.MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hp.imageprocessing.PreferencePage">
 
     <include
         android:id="@+id/toolbar"
@@ -24,20 +24,33 @@
         android:progressDrawable="@drawable/gradientprogressbar"
         tools:progress="60" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="false"
         android:layout_below="@+id/progressbar"
-        android:id="@+id/linearLayout">
+        android:layout_alignParentStart="true">
 
-        <ListView
-            android:id="@+id/listView1"
+        <Spinner
+            android:id="@+id/pref_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
+            android:layout_height="50dp"
+            android:entries="@array/preference"
+            android:layout_marginEnd="76dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_marginTop="59dp" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_preference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:text="Set Preference"
+            android:layout_below="@+id/pref_spinner"
+            android:layout_alignStart="@+id/pref_spinner"
+            android:layout_marginStart="35dp" />
+
+
+    </RelativeLayout>
+
 </RelativeLayout>

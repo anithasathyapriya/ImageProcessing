@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".imagesIn_grid" />
-        <activity android:name=".ImageDetails"></activity>
+        <activity android:name=".ImageDetails" />
+        <activity android:name=".PreferencePage"></activity>
     </application>
 
 </manifest>

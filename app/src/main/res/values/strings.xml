@@ -6,7 +6,17 @@
         <item>Search By People</item>
         <item>Search By Place</item>
         <item>Search By Date</item>
-         <item>Search By Month</item>
+        <item>Search By Month</item>
+        <item>Search By Favourites</item>
+        <item>Set Preference</item>
+    </string-array>
+
+    <string-array name="preference">
+        <item>Select an option</item>
+        <item>Search By People</item>
+        <item>Search By Place</item>
+        <item>Search By Date</item>
         <item>Search By Favourites</item>
     </string-array>
+
 </resources>

@@ -47,6 +47,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
  String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/";
+    String selectHost;
 
     //public ArrayList<String> bitmapNames = new ArrayList<String>();
     public ArrayList<GridImageClass> bitmapclass;
@@ -63,10 +64,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     ImageAdapter_Grid adapter;
     String datestring=null;
     TextView tv;
+    String flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_in_grid);
+        bitmapclass = new ArrayList<>();
         Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
         tv=(TextView) tb.findViewById(R.id.toolbar_title);
         //String datestring=null;
@@ -75,20 +78,35 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         final Bundle b = getIntent().getExtras();
         final String folder = b.get("Id").toString();
         fol = folder;
+        flag = b.get("flag").toString();
         Spinner spinner=(Spinner) findViewById(R.id.categorySpinner);
         spinner.setVisibility(View.INVISIBLE);
         if (folder.compareTo("Favourite")==0)
         {
-            host=host+"/GetFavourites";
+            selectHost=host+"/GetFavourites";
             tv.setText("My Favourites");
         }
-        else {
-            host = host+ "folderImages/" + folder;
+        else if (flag.compareTo("false")==0){
+            selectHost = host+ "folderImages/" + folder;
             //displaying the selected date as Title of Toolbar
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             try {
                 d = sdf.parse(fol);
                 sdf = new SimpleDateFormat("dd MMM");
+                datestring = sdf.format(d);
+            } catch (Exception e) {
+            }
+            tv.setText("" + datestring);
+            name = datestring;
+            tv.setTextColor(Color.BLACK);
+        }
+        else if (flag.compareTo("true")==0){
+            selectHost = host+ "MonthallImages/" + folder;
+            //displaying the selected date as Title of Toolbar
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            try {
+                d = sdf.parse(fol);
+                sdf = new SimpleDateFormat("MM yyyy");
                 datestring = sdf.format(d);
             } catch (Exception e) {
             }
@@ -112,66 +130,16 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 finish();
             }
         });
+        GridView grid = (GridView) findViewById(R.id.gridview1);
+        GridTaskClass gridTask = new GridTaskClass(imagesIn_grid.this, grid, pb);
+        gridTask.execute(selectHost);
+        grid.setOnItemClickListener(imagesIn_grid.this);
 
-        new AsyncTask<Void, Void, JSONArray>() {
-            //progress bar activation
-            @Override
-            protected  void onPreExecute(){
-                pb.setVisibility(View.VISIBLE);
-                pb.setProgress(0);
-                pb.setIndeterminate(true);
-            }
-            @Override
-            //  getting all images in the folder
-            protected JSONArray doInBackground(Void... params) {
-                JSONArray a = JSONParser.getJSONArrayFromUrl(host );
-                return (a);
-            }
-            @Override
-            protected void onPostExecute(JSONArray result) {
-                bitmapclass = new ArrayList<GridImageClass>();
-                try {
-                    for (int j = 0; j < result.length(); j++) {
-                        JSONArray jByte = result.getJSONObject(j).getJSONObject("img").getJSONArray("Data");
-                        String name = result.getJSONObject(j).getString("name");
-                        String rel=result.getJSONObject(j).getString("relevance");
-                        byte[] by = new byte[jByte.length()];
-                        for (int i = 0; i < jByte.length(); i++) {
-                            by[i] = (byte) (((int) jByte.get(i)) & 0xFF);
-                        }
-                        Bitmap bng = null;
-                        bng = BitmapFactory.decodeByteArray(by, 0, by.length);
-                        GridImageClass c = new GridImageClass();
-                        c.img = bng;
-                        c.name = name;
-                        c.relevance=rel;
-                        bitmapclass.add(c);
-                        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-                        bng.compress(Bitmap.CompressFormat.JPEG,100, baos);
-                        byte[] b=baos.toByteArray();
-                        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-                        File file;
-                        FileOutputStream outputStream;
-                        try {
-                            file = new File(getApplicationContext().getCacheDir(),c.name);
-                            outputStream = new FileOutputStream(file);
-                            outputStream.write(temp.getBytes());
-                            outputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
 
-                } catch (Exception e) {
-                }
-                gv = (GridView) findViewById(R.id.gridview1);
-                setGridViewAdapter();
-                pb.setVisibility(View.INVISIBLE);
-            }
-        }.execute();
         Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
         ImageView  ivDel=(ImageView) tool.findViewById(R.id.imgDelete);
         // code for Delete button in Grid view
+
         ivDel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -179,48 +147,53 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    final int countImages = bitmapNames.size();
-                    StringBuffer names = new StringBuffer();
-                    for (String s:bitmapNames) {
-                        names.append(s+"__");
-                    }
-                    final String imgNames = names.toString();
-                    new AsyncTask<Void, Void, String>() {
-                        //progress bar activation
-                        @Override
-                        protected void onPreExecute() {
-                            pb.setVisibility(View.VISIBLE);
-                            pb.setProgress(0);
-                            pb.setIndeterminate(true);
-                        }
-                        @Override
-                        //  getting all images in the folder
-                        protected String doInBackground(Void... params) {
-                            String a = JSONParser.postStream(host + "DeleteSelected", imgNames);
-                            return (a);
-                        }
-                        @Override
-                        protected void onPostExecute(String result) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), countImages+" Images deleted", Toast.LENGTH_LONG).show();
-                                }
-                            });
 
-                            final Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("Id", folder);
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames);
+                    selectHost = host + "DeleteSelected";
+                    gridSel.execute(selectHost);
 
-                            /*(new Handler())
-                                    .postDelayed(
-                                            new Runnable() {
-                                                public void run() {
-                                                    startActivity(intent);
-                                                }
-                                            }, 2000);*/
-                        }
-                    }.execute();
+//                    final int countImages = bitmapNames.size();
+//                    StringBuffer names = new StringBuffer();
+//                    for (String s:bitmapNames) {
+//                        names.append(s+"__");
+//                    }
+//                    final String imgNames = names.toString();
+//                    new AsyncTask<Void, Void, String>() {
+//                        //progress bar activation
+//                        @Override
+//                        protected void onPreExecute() {
+//                            pb.setVisibility(View.VISIBLE);
+//                            pb.setProgress(0);
+//                            pb.setIndeterminate(true);
+//                        }
+//                        @Override
+//                        //  getting all images in the folder
+//                        protected String doInBackground(Void... params) {
+//                            String a = JSONParser.postStream(host + "DeleteSelected", imgNames);
+//                            return (a);
+//                        }
+//                        @Override
+//                        protected void onPostExecute(String result) {
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(getApplicationContext(), countImages+" Images deleted", Toast.LENGTH_LONG).show();
+//                                }
+//                            });
+//
+//                            final Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            intent.putExtra("Id", folder);
+//
+//                            /*(new Handler())
+//                                    .postDelayed(
+//                                            new Runnable() {
+//                                                public void run() {
+//                                                    startActivity(intent);
+//                                                }
+//                                            }, 2000);*/
+//                        }
+//                    }.execute();
                 }
             }
         });
@@ -234,7 +207,12 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    final int countImages = bitmapNames.size();
+
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames);
+                    selectHost = host + "MakeFavourite";
+                    gridSel.execute(selectHost);
+
+                    /*final int countImages = bitmapNames.size();
                     StringBuffer names = new StringBuffer();
                     for (String s:bitmapNames) {
                         names.append(s+"__");
@@ -268,7 +246,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                                 }
                             });
                         }
-                    }.execute();
+                    }.execute();*/
                 }
             }
         });
@@ -282,7 +260,11 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    final int countImages = bitmapNames.size();
+
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames);
+                    selectHost = host + "ChangeRelavance";
+                    gridSel.execute(selectHost);
+                    /*final int countImages = bitmapNames.size();
                     StringBuffer names = new StringBuffer();
                     for (String s:bitmapNames) {
                         names.append(s+"__");
@@ -321,7 +303,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                                                 }
                                             }, 2000);
                         }
-                    }.execute();
+                    }.execute();*/
                 }
             }
         });
@@ -331,7 +313,9 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
       @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
+          bitmapclass = GridTaskClass.getBitmapclass();
         intent.putExtra("iName",bitmapclass.get(i).name);
+          intent.putExtra("flag", flag);
         //intent.putExtra("iName",bitmapNames.get(i));
         intent.putExtra("Id",fol);
         startActivity(intent);

@@ -17,11 +17,13 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
     ProgressBar pb;
     Context context;
     ArrayList<String> bitmapNames;
+    imagesIn_grid activity;
 
-    public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames){
+    public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames, imagesIn_grid activity){
         this.context = context;
         this.pb = p;
         this.bitmapNames = bitmapNames;
+        this.activity = activity;
     }
 
 
@@ -40,13 +42,7 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         final int countImages = bitmapNames.size();
-
-        new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, countImages +" Images affected", Toast.LENGTH_LONG).show();
-            }
-        };
+        activity.reloadActivity();
     }
 
     private String getImageNames(){

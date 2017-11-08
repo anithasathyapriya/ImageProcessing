@@ -46,7 +46,8 @@
         android:text="Delete"
         android:layout_alignBaseline="@+id/btnFavourite"
         android:layout_alignBottom="@+id/btnFavourite"
-        android:layout_alignParentEnd="true" />
+        android:layout_toEndOf="@+id/etComment"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/txtComment"

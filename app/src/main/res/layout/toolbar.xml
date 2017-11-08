@@ -20,8 +20,10 @@
         android:layout_marginLeft="2dp"
         android:foreground="@drawable/menusymbol"
         android:entries="@array/items"
-        android:paddingBottom="2dp"
         android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:textSize="20sp"
+        android:textColor="#0d0c0c"
         android:popupBackground="@android:color/white"
         android:gravity="left"/>
 

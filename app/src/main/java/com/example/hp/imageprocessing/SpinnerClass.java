@@ -35,15 +35,24 @@ public class SpinnerClass  extends AsyncTask<String,Void,JSONArray> {
     ListView listView;
     ProgressBar pb;
     String monthFlag;
+    MainActivity activity;
 
+
+    SpinnerClass(Context context, ListView listView, ProgressBar progressBar, String monthFlag, MainActivity activity) {
+        this.monthFlag = monthFlag;
+        this.context = context;
+        this.listView = listView;
+        this.pb = progressBar;
+        this.activity = activity;
+    }
 
     SpinnerClass(Context context, ListView listView, ProgressBar progressBar, String monthFlag) {
         this.monthFlag = monthFlag;
         this.context = context;
         this.listView = listView;
         this.pb = progressBar;
+        //this.activity = activity;
     }
-
 
     @Override
     protected void onPreExecute() {
@@ -61,10 +70,10 @@ public class SpinnerClass  extends AsyncTask<String,Void,JSONArray> {
     @Override
     protected void onPostExecute(JSONArray result) {
         Bitmap bng;
-        ArrayList<ImageClass>list=new ArrayList<>();
+        ArrayList<ImageClass> list = new ArrayList<>();
         try {
-            for (int j = 0; j < result.length(); j++)
-            {   ImageClass c = new ImageClass();
+            for (int j = 0; j < result.length(); j++) {
+                ImageClass c = new ImageClass();
                 try {
                     JSONArray a = result.getJSONObject(j).getJSONArray("images");
                     String name = result.getJSONObject(j).getString("fNames");
@@ -79,14 +88,23 @@ public class SpinnerClass  extends AsyncTask<String,Void,JSONArray> {
                         c.indexes.add(i);
                         saveImages(c.name, String.valueOf(i), bng);
                     }
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 list.add(c);
             }
 
-        } catch (Exception e) {  }
-        ImageAdapter_List adapter = new ImageAdapter_List(context,R.layout.activity_main, list, monthFlag);
+        } catch (Exception e) {
+        }
+
+        ImageAdapter_List adapter = new ImageAdapter_List(context, R.layout.activity_main, list, monthFlag);
         listView.setAdapter(adapter);
         pb.setVisibility(View.INVISIBLE);
+        if(activity != null){
+            activity.SpinnerClick();
+        }
+
+
+
     }
 
     public void saveImages(String folder, String imgIndex, Bitmap bng){
@@ -112,5 +130,4 @@ public class SpinnerClass  extends AsyncTask<String,Void,JSONArray> {
             e.printStackTrace();
         }
     }
-
 }

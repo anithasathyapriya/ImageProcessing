@@ -30,26 +30,5 @@
         android:clickable="true"
         android:src="@drawable/relevanticon" />
 
-    <!--<ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="right"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/hearttransparent1"/>
 
-    <ImageButton
-        style="@android:style/Widget.DeviceDefault.ImageButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/hearttransparent1" />
-
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="left"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/relevanticon" />
--->
 </android.support.v7.widget.Toolbar>

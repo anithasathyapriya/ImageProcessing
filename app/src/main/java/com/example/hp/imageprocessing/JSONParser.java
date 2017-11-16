@@ -36,7 +36,7 @@ public class JSONParser {
             is = conn.getInputStream();
             long end = System.currentTimeMillis();
             //conn.disconnect();
-            Log.i("---------Time-----", String.valueOf(end-start));
+             Log.i("---------Time-----", String.valueOf(end-start));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {

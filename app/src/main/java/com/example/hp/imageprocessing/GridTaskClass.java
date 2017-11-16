@@ -89,6 +89,7 @@ public class GridTaskClass extends AsyncTask<String,Void,JSONArray>  {
 
         } catch (Exception e) {
         }
+        bitmaps.clear();
         bitmaps = bitmapclass;
         //gv = (GridView) findViewById(R.id.gridview1);
         setGridViewAdapter();
@@ -98,7 +99,7 @@ public class GridTaskClass extends AsyncTask<String,Void,JSONArray>  {
     public void setGridViewAdapter(){
         adapter = new ImageAdapter_Grid(context, bitmapclass);
         gridView.setAdapter(adapter);
-        bitmaps = bitmapclass;
+        //bitmaps = bitmapclass;
     }
 
     public static ArrayList<GridImageClass> getBitmapclass() {

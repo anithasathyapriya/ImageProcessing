@@ -8,34 +8,41 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class PreferencePage extends AppCompatActivity implements View.OnClickListener{
 
     SharedPreferences pref;
     Spinner spinner;
-    String item;
+    String item,userid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preference_page_layout);
+        Bundle b = getIntent().getExtras();
+        userid = b.get("Uid").toString();
 
         spinner=(Spinner) findViewById(R.id.pref_spinner);
         pref= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        item= spinner.getSelectedItem().toString();
-        Button b=(Button) findViewById(R.id.btn_preference);
-        b.setOnClickListener(this);
+
+        Button button=(Button) findViewById(R.id.btn_preference);
+        button.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v)
     {
+        int i =  spinner.getSelectedItemPosition();
+        item=String.valueOf(i);
+
         SharedPreferences.Editor editor=pref.edit();
         editor.putString("preference",item);
         editor.commit();
-        Intent i = new Intent();
-        i.setAction(Intent.ACTION_MAIN);
-        i.addCategory(Intent.CATEGORY_HOME);
-        startActivity(i);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("Uid",userid);
+        startActivity(intent);
+
     }
 }

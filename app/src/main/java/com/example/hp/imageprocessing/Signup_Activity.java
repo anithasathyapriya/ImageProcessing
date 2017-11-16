@@ -17,6 +17,7 @@ import android.widget.TextView;
 public class Signup_Activity extends AppCompatActivity {
 
     String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/Signup";
+    //"http://192.168.48.247/EventTraceWebAppV1/Service1.svc/Login";
     String Result,Uname,Pword,cname;
     EditText pass,pass1,name,username;
     TextView error;

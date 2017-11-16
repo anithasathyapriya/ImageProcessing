@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -48,7 +49,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
- String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/";
+ String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     String selectHost;
 
     //public ArrayList<String> bitmapNames = new ArrayList<String>();
@@ -59,40 +60,44 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     private  ProgressBar pb;
     public ArrayList<String> bitmapNames;
     boolean selected = false;
-    MenuItem itemCancel;
-    MenuItem itemSelect;
-    Toolbar tool;
+    MenuItem itemCancel,itemSelect;
+    Toolbar tb,tool;
     private Menu menu;
     ImageAdapter_Grid adapter;
-    String datestring=null;
+    String selectedHost,flag,userid,Sitem,monthflag,selection,datestring=null;
     TextView tv;
-    String flag;
-    String selection;
+    ListView listview;
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_in_grid);
         bitmapclass = new ArrayList<>();
-        Toolbar tb=(Toolbar)findViewById(R.id.toolbar);
+        tb=(Toolbar)findViewById(R.id.toolbar);
         tv=(TextView) tb.findViewById(R.id.toolbar_title);
-        //String datestring=null;
         Date d=null;
         pb=(ProgressBar) findViewById(R.id.progressbar2);
         final Bundle b = getIntent().getExtras();
         final String folder = b.get("Id").toString();
         fol = folder;
         flag = b.get("flag").toString();
-        Spinner spinner=(Spinner) findViewById(R.id.categorySpinner);
-        spinner.setVisibility(View.INVISIBLE);
-
+        userid=b.get("Uid").toString();
 
         if (folder.compareTo("Favourite")==0)
         {
             selectHost=host+"/GetFavourites";// call to Favourites page
             tv.setText("My Favourites");
+
         }
+        else if (folder.compareTo("SearchByPeople")==0)
+        {
+            selectHost=host+"/SearchByPeople/"+userid;
+            tv.setText("Your People");
+            flag="Related";
+        }
+
         else if (flag.compareTo("false")==0){
-            selectHost = host+ "folderImages/" + folder;// call to dispaly all images of selected date
+            selectHost = host+"/folderImages/"+folder+"/"+userid;// call to dispaly all images of selected date
 
             //displaying the selected date as Title of Toolbar
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -106,20 +111,20 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             name = datestring;
             tv.setTextColor(Color.BLACK);
         }
-        else if (flag.compareTo("true")==0){
-            selectHost = host+ "MonthallImages/" + folder;// call to One whole month page
+       /* else if (flag.compareTo("true")==0){
+            selectHost = host+"/MonthallImages/" + folder+"/"+userid;// call to One whole month page
             //displaying the selected date as Title of Toolbar
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
             try {
                 d = sdf.parse(fol);
-                sdf = new SimpleDateFormat("dd MMM yyyy");
+                sdf = new SimpleDateFormat(" MMM yyyy");
                 datestring = sdf.format(d);
             } catch (Exception e) {
             }
-            tv.setText("" + datestring);
+            tv.setText(""+datestring);
             name = datestring;
             tv.setTextColor(Color.BLACK);
-        }
+        }*/
         clear();
 
         // setting back button in the toolbar
@@ -134,11 +139,17 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 {
                     intent = new Intent(getApplicationContext(), MonthActivity.class);
                     intent.putExtra("Id",fol);
+                    intent.putExtra("Uid",userid);
+                    intent.putExtra("flag",flag);
+
 
                 }
                 else
                 {
                     intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("Uid",userid);
+                    intent.putExtra("Id", folder);
+                    intent.putExtra("flag",flag);
                 }
                 startActivity(intent);
                 finish();
@@ -153,6 +164,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         Toolbar tool=(Toolbar) findViewById(R.id.bottomtoolbar);
         ImageView  ivDel=(ImageView) tool.findViewById(R.id.imgDelete);
 
+
         // code for Delete button in Grid view
         ivDel.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -162,8 +174,8 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 }
                 else {
 
-                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames, imagesIn_grid.this);
-                    selectHost = host + "DeleteSelected";
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames,userid, imagesIn_grid.this);
+                    selectHost = host+"/DeleteSelected";
                     selection="Deleted";
                     gridSel.execute(selectHost);
 
@@ -181,9 +193,9 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 }
                 else {
 
-                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames, imagesIn_grid.this);
-                    selectHost = host + "MarkFavourite";
-                    selection=" Marked as Favourite";
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames,userid, imagesIn_grid.this);
+                    selectHost = host+"/MarkFavourite";
+                    selection="Marked as Favourite";
                     gridSel.execute(selectHost);
 
                 }
@@ -200,8 +212,8 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                 }
                 else {
 
-                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames, imagesIn_grid.this);
-                    selectHost = host + "ChangeRelavance";
+                    GridSelectionClass gridSel = new GridSelectionClass(imagesIn_grid.this, pb, bitmapNames, userid,imagesIn_grid.this);
+                    selectHost = host +"/ChangeRelavance";
                     selection="Relavance Changed";
                     gridSel.execute(selectHost);
 
@@ -212,16 +224,30 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     }
     // for  click event of one image in grid view
       @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-      {
-        Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
-        bitmapclass = GridTaskClass.getBitmapclass();
-        intent.putExtra("iName",bitmapclass.get(i).name);
-        intent.putExtra("flag", flag);
-        intent.putExtra("Id",fol);
-        startActivity(intent);
-    }
 
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        if (flag.compareTo("Related")==0)
+        {
+            Intent intent = new Intent(getApplicationContext(),RelatedFacesActivity.class);
+            bitmapclass = GridTaskClass.getBitmapclass();
+            intent.putExtra("Id","SearchByPeople");
+            intent.putExtra("Uid",userid);
+            intent.putExtra("flag", bitmapclass.get(i).name); // image name set to flag
+            startActivity(intent);
+
+        }
+        else {
+
+            Intent intent = new Intent(getApplicationContext(), ImageDetails.class);
+            bitmapclass = GridTaskClass.getBitmapclass();
+            intent.putExtra("iName", bitmapclass.get(i).name);
+            intent.putExtra("flag", flag);
+            intent.putExtra("Id", fol);
+            intent.putExtra("Uid",userid);
+            startActivity(intent);
+        }
+    }
     //adding "select" to toolbar as a menu item
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -304,6 +330,9 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     public   void onBackPressed(){
 
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        intent.putExtra("Id",fol);
+        intent.putExtra("Uid",userid);
+        intent.putExtra("flag",flag);
         startActivity(intent);
         return;
     }

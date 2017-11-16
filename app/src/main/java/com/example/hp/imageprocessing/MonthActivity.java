@@ -24,16 +24,20 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
     String Sitem;
     String selectedHost;
     String monthflag="true";
-    String host = "http://192.168.0.177/EventTraceWebAppV1/Service1.svc/GetAllDays/";
+    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/GetAllDays/";
+    String userid,flag,folder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month);
         final Bundle b = getIntent().getExtras();
-        final String folder = b.get("Id").toString();
-        String monthflag="false";
+        folder = b.get("Id").toString();
+        userid=b.get("Uid").toString();
+        flag=b.get("flag").toString();
+        monthflag="false";
         tb=(Toolbar)findViewById(toolbar);
+        listview=(ListView)findViewById(R.id.monthListView);
         spinner=(Spinner)findViewById(R.id.categorySpinner);
         pb=(ProgressBar) findViewById(R.id.progressbar);
         TextView mTitle = (TextView) tb.findViewById(R.id.toolbar_title);
@@ -42,19 +46,20 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         mTitle.setText("My Album");
 
 
-        host=host+folder;
+        host=host+folder+"/"+userid;
         listview = (ListView)findViewById(R.id.monthListView);
         SpinnerClass exe = new SpinnerClass(MonthActivity.this, listview, pb, monthflag);
         exe.execute(host);
         listview.setOnItemClickListener(MonthActivity.this);
-        SpinnerClick();
+       // SpinnerClick();
     }
 
     public void onItemClick(AdapterView<?> av, View v, int position, long id) {
         ImageClass item = (ImageClass) av.getItemAtPosition(position);
         Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
-        intent.putExtra("Id", item.getName());
-        intent.putExtra("flag", monthflag);
+        intent.putExtra("Id",item.getName());
+        intent.putExtra("flag",monthflag);
+        intent.putExtra("Uid",userid);
         startActivity(intent);
     }
 
@@ -70,7 +75,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
                     monthflag="false";
                     selectedHost=host+"/ThreeImages";
                     listview = (ListView)findViewById(R.id.listView1);
-                    SpinnerClass exe = new SpinnerClass(MonthActivity.this, listview, pb, monthflag);
+                    SpinnerClass exe = new SpinnerClass(MonthActivity.this,listview,pb,monthflag);
                     exe.execute(selectedHost);
                 }
 
@@ -79,7 +84,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
                     monthflag="true";
                     selectedHost=host+"/MonthImages";
                     listview = (ListView)findViewById(R.id.listView1);
-                    SpinnerClass exe = new SpinnerClass(MonthActivity.this, listview, pb, monthflag);
+                    SpinnerClass exe = new SpinnerClass(MonthActivity.this, listview,pb,monthflag);
                     exe.execute(selectedHost);
                     listview.setOnItemClickListener(MonthActivity.this);
                 }
@@ -100,7 +105,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onNothingSelected(AdapterView arg0)
             {
-                Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
     }

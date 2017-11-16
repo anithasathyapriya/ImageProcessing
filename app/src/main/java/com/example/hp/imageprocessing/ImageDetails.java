@@ -28,7 +28,7 @@ public class ImageDetails extends AppCompatActivity {
 
     final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
-    String name,imgDec,relevance,favourite, folder, flag;
+    String name,imgDec,relevance,favourite, folder, flag,userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class ImageDetails extends AppCompatActivity {
         final String imgName = b.get("iName").toString();
         folder = b.get("Id").toString();
         flag = b.get("flag").toString();
+        userid=b.get("Uid").toString();
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText("" + imgName);
@@ -45,21 +46,31 @@ public class ImageDetails extends AppCompatActivity {
         Spinner spinner=(Spinner) findViewById(R.id.categorySpinner);
         spinner.setVisibility(View.INVISIBLE);
 
-        // back button in the application
+        // back button in the tool bar
 
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         tb.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Id", folder);
-                intent.putExtra("flag", flag);
-                startActivity(intent);
-                //finish();
+                if(flag.compareTo("Related")==0){
+                    Intent intent = new Intent(getApplicationContext(), RelatedFacesActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("Id","SearchByPeople");
+                    intent.putExtra("Uid",userid);
+                    intent.putExtra("flag",folder);
+                    startActivity(intent);
+
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("Id", folder);
+                    intent.putExtra("Uid", userid);
+                    intent.putExtra("flag",flag);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -69,7 +80,7 @@ public class ImageDetails extends AppCompatActivity {
 
             @Override
             protected JSONObject doInBackground(Void... params) {
-                JSONObject a = JSONParser.getJSONFromUrl(host + "/viewImage/" + imgName);
+                JSONObject a = JSONParser.getJSONFromUrl(host +"/viewImage/"+imgName+"/"+userid);
                 return a;
             }
 
@@ -108,13 +119,13 @@ public class ImageDetails extends AppCompatActivity {
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        JSONParser.getJSONFromUrl(host + "/UpdateRelevance/" + imgName);
+                        JSONParser.getJSONFromUrl(host+"/UpdateRelevance/"+imgName+"/"+userid);
 
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "Relevance Flag Updated", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Relevance Flag Updated", Toast.LENGTH_LONG).show();
                             }
                         });
                         return null;
@@ -131,7 +142,7 @@ public class ImageDetails extends AppCompatActivity {
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        JSONParser.getJSONFromUrl(host + "/UpdateFavourite/" + imgName);
+                        JSONParser.getJSONFromUrl(host + "/UpdateFavourite/"+ imgName+"/"+userid);
 
                         runOnUiThread(new Runnable() {
 
@@ -156,7 +167,7 @@ public class ImageDetails extends AppCompatActivity {
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        JSONParser.getJSONFromUrl(host + "/DeleteImage/" + imgName);
+                        JSONParser.getJSONFromUrl(host+"/DeleteImage/"+imgName+"/"+userid);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -171,6 +182,8 @@ public class ImageDetails extends AppCompatActivity {
                         Intent intent = new Intent(ImageDetails.this, imagesIn_grid.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("Id", folder);
+                        intent.putExtra("Uid",userid);
+                        intent.putExtra("flag",flag);
                         startActivity(intent);
                         //((Activity)getApplicationContext()).finish();
                     }
@@ -189,7 +202,7 @@ public class ImageDetails extends AppCompatActivity {
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        JSONParser.getJSONFromUrl(host + "/UpdateComment/" + imgName + "/" + comment);
+                        JSONParser.getJSONFromUrl(host+"/UpdateComment/"+imgName+"/"+comment+"/"+userid);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -220,6 +233,7 @@ public class ImageDetails extends AppCompatActivity {
             {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Uid",userid);
                 startActivity(intent);
                 finish();
             }
@@ -233,6 +247,8 @@ public class ImageDetails extends AppCompatActivity {
         Log.i("onBackPressed: ", "");
         Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
         intent.putExtra("Id", folder);
+        intent.putExtra("Uid",userid);
+        intent.putExtra("flag",flag);
         startActivity(intent);
     }
 }

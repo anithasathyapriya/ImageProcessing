@@ -18,12 +18,14 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
     Context context;
     ArrayList<String> bitmapNames;
     imagesIn_grid activity;
+    String Uid;
 
-    public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames, imagesIn_grid activity){
+    public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames,String Uid, imagesIn_grid activity){
         this.context = context;
         this.pb = p;
         this.bitmapNames = bitmapNames;
         this.activity = activity;
+        this.Uid=Uid;
     }
 
 
@@ -47,9 +49,11 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
 
     private String getImageNames(){
         StringBuffer names = new StringBuffer();
+
         for (String s:bitmapNames) {
             names.append(s+"__");
         }
+        names.append("__"+Uid);
         final String imgNames = names.toString();
         return imgNames;
     }

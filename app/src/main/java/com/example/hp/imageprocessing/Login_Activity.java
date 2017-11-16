@@ -19,6 +19,7 @@ public class Login_Activity extends AppCompatActivity{
 
     String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/Login";
     String Uname,Pword,Fname="Dummy";
+    String[] Result;
     EditText user,pass;
     TextView name,textview;
     @Override
@@ -76,11 +77,15 @@ public class Login_Activity extends AppCompatActivity{
                 @Override
                 protected void onPostExecute(String result)
                 {
-
+                    Result=result.split("\n");
                     result=result.substring(1,8);
                     if (result.compareTo("Success")==0)
                     {
                         Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                        int start = Result[0].lastIndexOf("_")+1;
+                        int end = Result[0].lastIndexOf("_")+5;
+                        String userid=Result[0].substring(start, end);
+                        intent.putExtra("Uid",userid);
                         startActivity(intent);
                     }
                     else {
@@ -96,6 +101,7 @@ public class Login_Activity extends AppCompatActivity{
             }
         });
 
+        //signup activity
         EditText signup=(EditText)findViewById(R.id.edxSignup);
         signup.setFocusableInTouchMode(false);
         signup.setOnClickListener(new View.OnClickListener()
@@ -107,6 +113,7 @@ public class Login_Activity extends AppCompatActivity{
             }
         });
 
+        //Sending email for forget password
         EditText forget=(EditText)findViewById(R.id.edxFPass);
         final String to="anisatpri@gmail.com";
         forget.setOnClickListener(new View.OnClickListener()
@@ -123,6 +130,7 @@ public class Login_Activity extends AppCompatActivity{
                     //startActivity(Intent.createChooser(intent, "Choose an Email client :"));
                     startActivity(intent);
                 }
+                textview.setText("Email sent to Admin Department,Thanks!");
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.example.hp.imageprocessing;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,20 +13,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.Month;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.example.hp.imageprocessing.R.id.toolbar;
+
+// for getting all the days of a month
 
 public class MonthActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private Toolbar tb;
     private ProgressBar pb;
     ListView listview;
     Spinner spinner;
-    String Sitem;
-    String selectedHost;
-    String monthflag="true";
+    String userid,flag,folder,Sitem,selectedHost,datestring,monthflag="true";
     String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/GetAllDays/";
-    String userid,flag,folder;
+    Date d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,39 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         tb=(Toolbar)findViewById(toolbar);
         listview=(ListView)findViewById(R.id.monthListView);
         spinner=(Spinner)findViewById(R.id.categorySpinner);
+        spinner.setVisibility(View.INVISIBLE);
         pb=(ProgressBar) findViewById(R.id.progressbar);
-        TextView mTitle = (TextView) tb.findViewById(R.id.toolbar_title);
+        TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mTitle.setText("My Album");
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        try {
+            d = sdf.parse(folder);
+            sdf = new SimpleDateFormat("MMM yyyy");
+            datestring = sdf.format(d);
+        } catch (Exception e) {
+        }
+        tv.setText("" + datestring);
+        tv.setTextColor(Color.BLACK);
+        //mTitle.setText("My Album");
+
+        //activate back button
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // code for back button click
+        tb.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("Uid",userid);
+                intent.putExtra("key","backfrommonth");
+                startActivity(intent);
+                finish();
+            }
+        });
 
         host=host+folder+"/"+userid;
         listview = (ListView)findViewById(R.id.monthListView);
@@ -58,8 +87,9 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         ImageClass item = (ImageClass) av.getItemAtPosition(position);
         Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
         intent.putExtra("Id",item.getName());
-        intent.putExtra("flag",monthflag);
+        intent.putExtra("flag","false");
         intent.putExtra("Uid",userid);
+        intent.putExtra("key","pagefrommonth");
         startActivity(intent);
     }
 

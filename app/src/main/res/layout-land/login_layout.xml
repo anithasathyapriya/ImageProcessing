@@ -37,29 +37,29 @@
         android:id="@+id/edxUsername"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/txtMessage"
-        android:layout_centerHorizontal="true"
         android:ems="10"
         android:fontFamily="serif"
         android:inputType="textPersonName"
         android:text="    Enter User Name"
         android:textSize="20sp"
-        android:typeface="serif" />
+        android:typeface="serif"
+        android:layout_alignTop="@+id/txtMessage"
+        android:layout_alignEnd="@+id/btnLogin"
+        android:layout_marginEnd="57dp" />
 
 
     <EditText
         android:id="@+id/edxPassword"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/edxUsername"
-        android:layout_below="@+id/edxUsername"
-        android:layout_marginTop="18dp"
         android:ems="10"
         android:inputType="text"
         android:text="    Enter Password"
         android:textSize="20sp"
         android:typeface="serif"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_alignTop="@+id/edxUsername"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -73,7 +73,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="visible"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/edxSignup"
         android:layout_centerHorizontal="true" />
 
 
@@ -94,17 +94,13 @@
         android:textSize="20sp"
         android:typeface="serif"
         android:visibility="visible"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/btnLogin"
+        android:layout_above="@+id/edxFPass"
         android:layout_alignStart="@+id/btnLogin" />
 
     <EditText
         android:id="@+id/edxFPass"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView5"
-        android:layout_below="@+id/edxSignup"
-        android:layout_marginTop="12dp"
         android:ems="10"
         android:focusableInTouchMode="false"
         android:fontFamily="serif"
@@ -114,6 +110,9 @@
         android:textSize="20sp"
         android:typeface="serif"
         android:visibility="visible"
-        tools:clickable="true" />
+        tools:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginBottom="19dp" />
 
 </RelativeLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:fontFamily="serif"
+        android:text="Create Account"
+        android:textColor="@color/spb_default_color"
+        android:textSize="24sp"
+        android:typeface="serif" />
+
+
+
+    <TextView
+        android:id="@+id/txtError"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:fontFamily="serif"
+        android:text="TextV"
+        android:textSize="18sp"
+        android:typeface="serif"
+        android:visibility="invisible"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/edxName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter  Your Name"
+        android:layout_marginEnd="69dp"
+        android:layout_below="@+id/txtError"
+        android:layout_toStartOf="@+id/edxPass1" />
+
+    <EditText
+        android:id="@+id/edxUname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter UserName"
+        android:layout_alignBaseline="@+id/edxName"
+        android:layout_alignBottom="@+id/edxName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="35dp" />
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:lineSpacingExtra="24sp"
+        android:text="SUBMIT"
+        android:textSize="20sp"
+        android:typeface="serif"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/txtError"
+        android:layout_marginBottom="26dp" />
+
+    <EditText
+        android:id="@+id/edxPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Enter Password"
+        android:layout_below="@+id/edxName"
+        android:layout_alignStart="@+id/edxName" />
+
+    <EditText
+        android:id="@+id/edxPass1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Re type Password"
+        android:typeface="serif"
+        android:layout_alignTop="@+id/edxPass"
+        android:layout_alignStart="@+id/edxUname" />
+
+</RelativeLayout>

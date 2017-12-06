@@ -12,7 +12,8 @@
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
 
     <ProgressBar xmlns:tools="http://schemas.android.com/tools"

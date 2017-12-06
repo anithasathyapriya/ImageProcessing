@@ -38,7 +38,7 @@ public class CheckableGridView extends FrameLayout {
         if (image.relevance.compareTo("Max") == 0)
             drawable.setStroke(6, Color.GREEN);
         else
-            drawable.setStroke(6, Color.RED);
+            drawable.setStroke(6, Color.WHITE);
     }
 
     public void selectImages(){
@@ -51,7 +51,7 @@ public class CheckableGridView extends FrameLayout {
         if (rel.compareTo("Max") == 0)
             drawable.setStroke(6, Color.GREEN);
         else
-            drawable.setStroke(6, Color.RED);
+            drawable.setStroke(6, Color.WHITE);
     }
 
     // Getting the image from the cache memory

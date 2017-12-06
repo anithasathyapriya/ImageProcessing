@@ -12,7 +12,8 @@
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
     <ProgressBar
         android:id="@+id/progressbar2"
@@ -28,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/progressbar2" >
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/progressbar2">
 
         <GridView
             android:id="@+id/gridview1"
@@ -49,7 +50,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_above="@+id/bottomtoolbar"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true" />
 
         <include
             android:id="@+id/bottomtoolbar"

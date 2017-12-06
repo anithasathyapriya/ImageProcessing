@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hp.imageprocessing.ImageDetails">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/imgContact"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true" />
+
+    <!--<EditText
+        android:id="@+id/edxRelatedImages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgContact"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:ems="10"
+        android:fontFamily="serif"
+        android:inputType="textPersonName"
+        android:text="     View Related Images"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="20sp"
+        android:typeface="serif"
+        android:visibility="visible"
+        tools:clickable="true" />-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/imgContact">
+
+
+        <ListView
+            android:id="@+id/list_Contact"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imgContact">
+
+        <include
+            android:id="@+id/toolbar_contact"
+            layout="@layout/toolbar_contact"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/btnPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="57dp"
+            android:layout_marginEnd="174dp"
+            android:visibility="visible"
+            app:srcCompat="@drawable/plus_icon1"
+            android:layout_above="@+id/toolbar_contact"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:id="@+id/edxContactName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="29dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Enter Name "
+            android:visibility="visible"
+            android:layout_alignTop="@+id/btnPlus"
+            android:layout_toStartOf="@+id/btnPlus" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

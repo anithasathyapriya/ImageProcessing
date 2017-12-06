@@ -15,9 +15,10 @@
 
     <Spinner
         android:id="@+id/categorySpinner"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
+        android:entries="@array/items"
         android:focusableInTouchMode="true"
         android:focusedByDefault="false"
         android:foreground="@drawable/menusymbol"

@@ -6,7 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
 
+    </style>
+
+   <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/search_action</item>
     </style>
 
     <style name="myCustomMenuTextApearance" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,9 +24,6 @@
         <item name="android:layout_alignBottom">@id/toolbar</item>
         <item name="android:background">@color/light_color</item>
     </style>
-
-
-
 
     <style name="ProgressBar.Horizontal" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
     </style>

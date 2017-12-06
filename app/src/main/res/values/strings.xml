@@ -1,24 +1,20 @@
 <resources>
+
     <string name="app_name">Image Processing</string>
     <string name="action_search">Search Images</string>
 
     <string-array name="items">
-        <item>Search By People</item>
-        <item>Search By Place</item>
-        <item>Search By Date</item>
-        <item>Search By Month</item>
-        <item>Search By Favourites</item>
-        <item>Set Preference</item>
+        <item>User</item>
+        <item>Set My Startup Page </item>
         <item>Logout</item>
     </string-array>
 
     <string-array name="preference">
         <item>Select an option</item>
         <item>Search By People</item>
-        <item>Search By Place</item>
-        <item>Search By Date</item>
         <item>Search By Favourites</item>
-
+        <item>Search By Date</item>
+        <item>Search By Month</item>
     </string-array>
 
 </resources>

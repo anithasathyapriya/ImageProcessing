@@ -1,5 +1,6 @@
 package com.example.hp.imageprocessing;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -18,6 +19,7 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
     Context context;
     ArrayList<String> bitmapNames;
     imagesIn_grid activity;
+    RelatedFacesActivity activity1;
     String Uid;
 
     public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames,String Uid, imagesIn_grid activity){
@@ -27,7 +29,13 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
         this.activity = activity;
         this.Uid=Uid;
     }
-
+    public GridSelectionClass(Context context, ProgressBar p, ArrayList<String> bitmapNames,String Uid, RelatedFacesActivity activity){
+        this.context = context;
+        this.pb = p;
+        this.bitmapNames = bitmapNames;
+        this.activity1 = activity;
+        this.Uid=Uid;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -44,7 +52,10 @@ public class GridSelectionClass extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         final int countImages = bitmapNames.size();
-        activity.reloadActivity();
+        if(activity!=null)
+             activity.reloadActivity();
+        else if(activity1!=null)
+            activity1.reloadActivity();
     }
 
     private String getImageNames(){

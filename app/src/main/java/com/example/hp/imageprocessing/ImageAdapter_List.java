@@ -98,7 +98,7 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
             }
         }
 
-        // displaying the date as itile for each row
+        // displaying the date as title for each row
         else
         {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -116,11 +116,11 @@ public class ImageAdapter_List extends ArrayAdapter<ImageClass>{
             Date s1 = new Date();
             try {
                 s1 = sdf.parse(s);
-            } catch (Exception e) {
-            }
+            } catch (Exception e) { }
 
-            int diff = (int) (s1.getTime() - d2.getTime()) / (1000 * 60 * 60 * 24);
-            if (diff == 0)
+           // long diff = (long) ((s1.getTime() - d2.getTime()) / (1000 * 60 * 60 * 24);
+            long diff=s1.getTime()-d2.getTime();
+            if (diff == 0.00)
                 holder.txtDate.setText("Today");
             else if (diff == 1)
                 holder.txtDate.setText("Yesterday");

@@ -1,6 +1,7 @@
 package com.example.hp.imageprocessing;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,17 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class RelatedFacesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
+    String host="http://192.168.48.247/EventTraceWebAppV1/Service1.svc/SearchRelatedImages";
+    String host1="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public ArrayList<GridImageClass> bitmapclass;
     public ArrayList<String> bitmapNames;
-    String imgname,userid,folder,name;
+    String imgname,userid,folder,name,selectHost,selection,imgFullName,preferenceKey="null";
     MenuItem itemCancel,itemSelect;
     ImageAdapter_Grid adapter;
     boolean selected = false;
@@ -29,7 +34,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
     TextView tv;
     GridView gv;
     Spinner spinner;
-    String host="http://192.168.0.177/EventTraceWebAppV1/Service1.svc/SearchRelatedImages";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,49 +45,112 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
         folder = b.get("Id").toString();
         imgname = b.get("flag").toString();
         userid = b.get("Uid").toString();
-        pb = (ProgressBar) findViewById(R.id.progressbar2);
-         tb = (Toolbar) findViewById(R.id.toolbar);
-        spinner=(Spinner)findViewById(R.id.categorySpinner);
-        spinner.setVisibility(View.INVISIBLE);
+        if (b.containsKey("Pkey"))
+            preferenceKey = b.get("Pkey").toString();
+            pb = (ProgressBar) findViewById(R.id.progressbar2);
+            tb = (Toolbar) findViewById(R.id.toolbar);
+            tool=(Toolbar) findViewById(R.id.bottomtoolbar);
+            spinner = (Spinner) findViewById(R.id.categorySpinner);
+            spinner.setVisibility(View.INVISIBLE);
 
-        // setting the title
-        tv = (TextView) tb.findViewById(R.id.toolbar_title);
-        setSupportActionBar(tb);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        tv.setText("Related Images");
+            // setting the title
+            tv = (TextView) tb.findViewById(R.id.toolbar_title);
+            setSupportActionBar(tb);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            tv.setText("Related Images");
 
-        // back button in the tool bar
-        setSupportActionBar(tb);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        tb.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
+            // back button in the tool bar
+            setSupportActionBar(tb);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            tb.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Id","SearchByPeople");
-                intent.putExtra("Uid",userid);
-                intent.putExtra("flag","flag");
-                startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+                    intent.putExtra("Id", "SearchByPeople");
+                    intent.putExtra("Uid", userid);
+                    intent.putExtra("flag", "flag");
+                    if(preferenceKey.compareTo("preference")==0)
+                        intent.putExtra("Pkey","preference");
+                    startActivity(intent);
 
-            }
+                }
             });
 
 
-        gv = (GridView) findViewById(R.id.gridview1);
-        GridTaskClass gridTask = new GridTaskClass(RelatedFacesActivity.this, gv, pb);
-        host=host+"/"+userid+"/"+imgname;
-        gridTask.execute(host);
-        gv.setOnItemClickListener(RelatedFacesActivity.this);
-    }
+            gv = (GridView) findViewById(R.id.gridview1);
+            GridTaskClass gridTask = new GridTaskClass(RelatedFacesActivity.this, gv, pb);
+            host = host + "/" + userid + "/" + imgname;
+            gridTask.execute(host);
+            gv.setOnItemClickListener(RelatedFacesActivity.this);
+
+
+        ImageView ivDel=(ImageView) tool.findViewById(R.id.imgDelete);
+        // code for Delete button in Grid view
+        ivDel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapNames.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    GridSelectionClass gridSel = new GridSelectionClass(RelatedFacesActivity.this, pb, bitmapNames,userid, RelatedFacesActivity.this);
+                    selectHost = host1+"/DeleteSelected";
+                    selection="Deleted";
+                    gridSel.execute(selectHost);
+
+                }
+            }
+        });
+
+        ImageView  ivFav=(ImageView) tool.findViewById(R.id.imgHeart);
+        // code for Favourite button in Grid view
+        ivFav.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapNames.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    GridSelectionClass gridSel = new GridSelectionClass(RelatedFacesActivity.this, pb, bitmapNames,userid, RelatedFacesActivity.this);
+                    selectHost = host1+"/MarkFavourite";
+                    selection="Marked as Favourite";
+                    gridSel.execute(selectHost);
+                }
+            }
+        });
+
+        ImageView  ivRel=(ImageView) tool.findViewById(R.id.imgRelavant);
+        // code for Relavance button in Grid view
+        ivRel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (bitmapNames.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Kindly select atleast one image",Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    GridSelectionClass gridSel = new GridSelectionClass(RelatedFacesActivity.this, pb, bitmapNames, userid,RelatedFacesActivity.this);
+                    selectHost = host1 +"/ChangeRelavance";
+                    selection="Relavance Changed";
+                    gridSel.execute(selectHost);
+
+                }
+            }
+        });
+        }
+
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
 
         Intent intent = new Intent(getApplicationContext(),ImageDetails.class);
         bitmapclass = GridTaskClass.getBitmapclass();
-        intent.putExtra("iName", bitmapclass.get(i).name);
+        imgFullName=bitmapclass.get(i).name;
+        intent.putExtra("iName", imgFullName);
         intent.putExtra("flag", "Related");
         intent.putExtra("Id", imgname);
         intent.putExtra("Uid",userid);
@@ -168,6 +236,24 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
         return;
+    }
+
+    public void reloadActivity(){
+
+        final int countImages = bitmapNames.size();
+        Toast.makeText(RelatedFacesActivity.this, countImages +" Images" +selection, Toast.LENGTH_LONG).show();
+        final Intent intent = new Intent(getApplicationContext(),RelatedFacesActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Id",folder);
+        intent.putExtra("flag",imgname);
+        intent.putExtra("Uid",userid);
+        (new Handler())
+                .postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                startActivity(intent);
+                            }
+                        }, 2000);
     }
 }
 

@@ -46,7 +46,6 @@ public class SpinnerClass  extends AsyncTask<String,Void,JSONArray> {
         this.activity = activity;
     }
 
-
     SpinnerClass(Context context, ListView listView, ProgressBar progressBar, String monthFlag) {
         this.monthFlag = monthFlag;
         this.context = context;

@@ -46,7 +46,6 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         try {
             d = sdf.parse(folder);

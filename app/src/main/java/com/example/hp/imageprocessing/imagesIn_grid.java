@@ -79,12 +79,13 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         folder = b.get("Id").toString();
         flag = b.get("flag").toString();
         userid = b.get("Uid").toString();
+        fullName = b.get("FName").toString();
         if (b.containsKey("key")) {
             backkey = b.get("key").toString();
         } // for  the preference set by the user
         else if (b.containsKey("Pkey")) {
             preferenceKey = b.get("Pkey").toString();
-            fullName = b.get("FName").toString();
+            //fullName = b.get("FName").toString();
             setSupportActionBar(tb);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             tb.setTitle("");
@@ -153,9 +154,11 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
                     intent.putExtra("Id", folder);
                     intent.putExtra("Uid", userid);
                     intent.putExtra("flag", "true");
+                    intent.putExtra("FName",fullName);
                 } else {
                     intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("Uid", userid);
+                    intent.putExtra("FName",fullName);
                    /* intent.putExtra("Id", folder);
                     intent.putExtra("flag",flag);*/
                 }
@@ -230,6 +233,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("Id","SearchByPeople");
             intent.putExtra("Uid",userid);
             intent.putExtra("flag", bitmapclass.get(i).name);//image name set to flag
+            intent.putExtra("FName",fullName);
             if(preferenceKey.compareTo("preference")==0)
                 intent.putExtra("Pkey","preference");
             startActivity(intent);
@@ -243,6 +247,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("flag", flag);
             intent.putExtra("Id", folder);
             intent.putExtra("Uid",userid);
+            intent.putExtra("FName",fullName);
             if(preferenceKey.compareTo("preference")==0)
                 intent.putExtra("Pkey","preference");
             startActivity(intent);

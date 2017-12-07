@@ -25,7 +25,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
     String host1="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public ArrayList<GridImageClass> bitmapclass;
     public ArrayList<String> bitmapNames;
-    String imgname,userid,folder,name,selectHost,selection,imgFullName,preferenceKey="null";
+    String imgname,fullName,userid,folder,name,selectHost,selection,imgFullName,preferenceKey="null";
     MenuItem itemCancel,itemSelect;
     ImageAdapter_Grid adapter;
     boolean selected = false;
@@ -45,6 +45,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
         folder = b.get("Id").toString();
         imgname = b.get("flag").toString();
         userid = b.get("Uid").toString();
+        fullName=b.get("FName").toString();
         if (b.containsKey("Pkey"))
             preferenceKey = b.get("Pkey").toString();
             pb = (ProgressBar) findViewById(R.id.progressbar2);
@@ -71,6 +72,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
                     intent.putExtra("Id", "SearchByPeople");
                     intent.putExtra("Uid", userid);
                     intent.putExtra("flag", "flag");
+                    intent.putExtra("FName",fullName);
                     if(preferenceKey.compareTo("preference")==0)
                         intent.putExtra("Pkey","preference");
                     startActivity(intent);
@@ -154,6 +156,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
         intent.putExtra("flag", "Related");
         intent.putExtra("Id", imgname);
         intent.putExtra("Uid",userid);
+        intent.putExtra("FName",fullName);
         startActivity(intent);
     }
 

@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 intent.putExtra("Id", "Favourite");
                 intent.putExtra("Uid", userid);
                 intent.putExtra("flag", "Favourite");
+                intent.putExtra("FName",fullName);
                 startActivity(intent);
                 return  true;
             default:
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra("Id", item.getName());
         intent.putExtra("flag", monthflag);
         intent.putExtra("Uid", userid);
+        intent.putExtra("FName",fullName);
         startActivity(intent);
     }
 

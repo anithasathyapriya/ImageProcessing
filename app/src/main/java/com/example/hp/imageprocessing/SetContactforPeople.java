@@ -35,11 +35,11 @@ import static com.example.hp.imageprocessing.R.id.contact;
 
 public class SetContactforPeople extends AppCompatActivity {
 
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    final static String host ="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
     Toolbar tb,toolbar;
     Spinner spinner;
-    String cName,folder,flag,userid,imgName,personName,preferenceKey="null";
+    String cName,folder,fullName,flag,userid,imgName,personName,preferenceKey="null";
     ImageButton plusButon;
     EditText textAddName,textViewImages,contactName;
     ArrayList<String> contactList;
@@ -70,6 +70,7 @@ public class SetContactforPeople extends AppCompatActivity {
         folder = b.get("Id").toString();
         flag=imgName= b.get("flag").toString();
         userid = b.get("Uid").toString();
+        fullName=b.get("FName").toString();
         if (b.containsKey("Pkey"))
             preferenceKey = b.get("Pkey").toString();
         // setting back button in the toolbar
@@ -183,6 +184,7 @@ public class SetContactforPeople extends AppCompatActivity {
                 intent.putExtra("Id", "SearchByPeople");
                 intent.putExtra("Uid", userid);
                 intent.putExtra("flag", flag);//image name set to flag
+                intent.putExtra("FName",fullName);
                 if (preferenceKey.compareTo("preference") == 0)
                     intent.putExtra("Pkey", "preference");
                 startActivity(intent);
@@ -197,6 +199,7 @@ public class SetContactforPeople extends AppCompatActivity {
                 intent.putExtra("Id", "SearchByPeople");
                 intent.putExtra("Uid", userid);
                 intent.putExtra("flag", "flag");
+                intent.putExtra("FName",fullName);
                 intent.putExtra("backkey","BackfromContact");
                 if(preferenceKey.compareTo("preference")==0)
                     intent.putExtra("Pkey","preference");
@@ -208,7 +211,6 @@ public class SetContactforPeople extends AppCompatActivity {
 
     public void getContacts() {
             contactList = new ArrayList<String>();
-            String phoneNumber = null;
             Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
             String _ID = ContactsContract.Contacts._ID;
             String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;

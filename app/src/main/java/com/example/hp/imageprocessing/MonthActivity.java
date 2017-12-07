@@ -25,7 +25,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
     private ProgressBar pb;
     ListView listview;
     Spinner spinner;
-    String userid,flag,folder,Sitem,selectedHost,datestring,monthflag="true";
+    String userid,flag,folder,Sitem,selectedHost,datestring,fullName,monthflag="true";
     String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/GetAllDays/";
     Date d;
 
@@ -37,6 +37,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         folder = b.get("Id").toString();
         userid=b.get("Uid").toString();
         flag=b.get("flag").toString();
+        fullName=b.get("FName").toString();
         monthflag="false";
         tb=(Toolbar)findViewById(toolbar);
         listview=(ListView)findViewById(R.id.monthListView);
@@ -69,6 +70,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 intent.putExtra("Uid",userid);
                 intent.putExtra("key","backfrommonth");
+                intent.putExtra("FName",fullName);
                 startActivity(intent);
                 finish();
             }
@@ -88,11 +90,12 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
         intent.putExtra("Id",item.getName());
         intent.putExtra("flag","false");
         intent.putExtra("Uid",userid);
+        intent.putExtra("FName",fullName);
         intent.putExtra("key","pagefrommonth");
         startActivity(intent);
     }
 
-    public void SpinnerClick(){
+   /* public void SpinnerClick(){
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -137,6 +140,6 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
                 Toast.makeText(getApplicationContext(),"Nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
 }

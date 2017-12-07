@@ -23,22 +23,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class ImageDetails extends AppCompatActivity {
 
 
     final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
-    String name,imgDec,relevance,favourite,folder,flag,userid,comment,preferenceKey="null";
+    PhotoViewAttacher attacher;
+    String name,imgDec,imgName,relevance,favourite,folder,flag,userid,comment,fullName,preferenceKey="null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_details);
         Bundle b = getIntent().getExtras();
-        final String imgName = b.get("iName").toString();
+        imgName = b.get("iName").toString();
         folder = b.get("Id").toString();
         flag = b.get("flag").toString();
         userid = b.get("Uid").toString();
+        fullName=b.get("FName").toString();
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         TextView tv = (TextView) tb.findViewById(R.id.toolbar_title);
         tv.setText("" + imgName);
@@ -63,6 +67,7 @@ public class ImageDetails extends AppCompatActivity {
                         intent.putExtra("Id",folder);
                         intent.putExtra("Uid", userid);
                         intent.putExtra("flag", folder);
+                        //intent.putExtra("FName",fullName);
                         if (preferenceKey.compareTo("preference") == 0)
                             intent.putExtra("Pkey", "preference");
                         startActivity(intent);
@@ -73,6 +78,7 @@ public class ImageDetails extends AppCompatActivity {
                         intent.putExtra("Id", folder);
                         intent.putExtra("Uid", userid);
                         intent.putExtra("flag", flag);
+                        intent.putExtra("FName",fullName);
                         if (preferenceKey.compareTo("preference") == 0)
                             intent.putExtra("Pkey", "preference");
                         startActivity(intent);
@@ -108,6 +114,7 @@ public class ImageDetails extends AppCompatActivity {
                         imgVIew.setVisibility(View.VISIBLE);
                         EditText tv = (EditText) findViewById(R.id.etComment);
                         imgVIew.setImageBitmap(bitmapimage);
+                        attacher=new PhotoViewAttacher(imgVIew);
                         tv.setText((""));
                         if (imgDec.compareTo("null") != 0)
                             tv.setText(imgDec);
@@ -247,6 +254,7 @@ public class ImageDetails extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Uid",userid);
+                intent.putExtra("FName",fullName);
                 startActivity(intent);
                 finish();
             }

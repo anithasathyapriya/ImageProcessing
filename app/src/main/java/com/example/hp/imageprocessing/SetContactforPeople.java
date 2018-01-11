@@ -35,7 +35,7 @@ import static com.example.hp.imageprocessing.R.id.contact;
 
 public class SetContactforPeople extends AppCompatActivity {
 
-    final static String host ="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    final static String host ="http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
     Toolbar tb,toolbar;
     Spinner spinner;
@@ -175,6 +175,8 @@ public class SetContactforPeople extends AppCompatActivity {
             }
         }
         });
+
+        // to see the related images
 
         textViewImages.setFocusableInTouchMode(false);
         textViewImages.setOnClickListener(new View.OnClickListener() {

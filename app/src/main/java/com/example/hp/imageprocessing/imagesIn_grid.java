@@ -49,7 +49,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
- String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+ String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
     String selectHost;
 
     public ArrayList<GridImageClass> bitmapclass;
@@ -61,7 +61,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
     MenuItem itemCancel,itemSelect;
     Toolbar tb,tool;
     ImageAdapter_Grid adapter;
-    String fullName,Sitem,monthflag;
+    String fullName;
     TextView tv;
     ListView listview;
     Spinner spinner;
@@ -380,6 +380,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
         intent.putExtra("Id",folder);
         intent.putExtra("flag",flag);
         intent.putExtra("Uid",userid);
+        intent.putExtra("FName",fullName);
         (new Handler())
                 .postDelayed(
                         new Runnable() {

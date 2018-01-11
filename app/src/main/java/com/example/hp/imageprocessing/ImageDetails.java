@@ -28,7 +28,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class ImageDetails extends AppCompatActivity {
 
 
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    final static String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
     public Bitmap bitmapimage;
     PhotoViewAttacher attacher;
     String name,imgDec,imgName,relevance,favourite,folder,flag,userid,comment,fullName,preferenceKey="null";

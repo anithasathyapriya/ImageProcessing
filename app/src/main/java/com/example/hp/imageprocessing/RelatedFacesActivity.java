@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class RelatedFacesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    String host="http://192.168.48.247/EventTraceWebAppV1/Service1.svc/SearchRelatedImages";
-    String host1="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    String host="http://192.168.51.46/EventTraceWebAppV1/Service1.svc/SearchRelatedImages";
+    String host1="http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
     public ArrayList<GridImageClass> bitmapclass;
     public ArrayList<String> bitmapNames;
     String imgname,fullName,userid,folder,name,selectHost,selection,imgFullName,preferenceKey="null";

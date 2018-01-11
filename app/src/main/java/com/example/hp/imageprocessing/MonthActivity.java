@@ -26,7 +26,7 @@ public class MonthActivity extends AppCompatActivity implements AdapterView.OnIt
     ListView listview;
     Spinner spinner;
     String userid,flag,folder,Sitem,selectedHost,datestring,fullName,monthflag="true";
-    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/GetAllDays/";
+    String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc/GetAllDays/";
     Date d;
 
     @Override

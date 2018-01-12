@@ -49,7 +49,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
- String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
+ String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
     String selectHost;
 
     public ArrayList<GridImageClass> bitmapclass;
@@ -132,10 +132,7 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
             tv.setTextColor(Color.BLACK);
         }
 
-
         clear();
-
-
         gv = (GridView) findViewById(R.id.gridview1);
         GridTaskClass gridTask = new GridTaskClass(imagesIn_grid.this, gv, pb);
         gridTask.execute(selectHost);

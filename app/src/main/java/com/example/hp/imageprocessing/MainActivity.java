@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ListView listview;
     String userid,Sitem,fullName,monthflag = "false",selectedHost = null;
     boolean isFirstBoolean=true;
-    String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc";
+    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

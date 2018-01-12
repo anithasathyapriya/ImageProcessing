@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 public class Login_Activity extends AppCompatActivity {
 
-    String host = "http://192.168.51.46/EventTraceWebAppV1/Service1.svc/Login";
+    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/Login";
     SharedPreferences pref;
     String userid, monthflag, Uname,fullName, Pword, Fname ="Dummy";
     String[] Result;

@@ -49,7 +49,7 @@ import static com.example.hp.imageprocessing.R.id.toolbar;
 
 public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
- String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+ String host = "http://52.221.152.166/EventTrace/Service1.svc";
     String selectHost;
 
     public ArrayList<GridImageClass> bitmapclass;
@@ -94,7 +94,8 @@ public class imagesIn_grid extends AppCompatActivity implements AdapterView.OnIt
 
         if (flag.compareTo("login") == 0) {
             spinner.setVisibility(View.INVISIBLE);
-        } else {
+        }
+        else {
             spinner.setVisibility(View.INVISIBLE);
             // setting back button in the toolbar
             setSupportActionBar(tb);

@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 public class Login_Activity extends AppCompatActivity {
 
-    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc/Login";
+    String host = "http://52.221.152.166/EventTrace/Service1.svc/Login";
     SharedPreferences pref;
     String userid, monthflag, Uname,fullName, Pword, Fname ="Dummy";
     String[] Result;
@@ -139,7 +139,7 @@ public class Login_Activity extends AppCompatActivity {
 
         //Sending email for forget password
         EditText forget = (EditText) findViewById(R.id.edxFPass);
-        final String to = "anisatpri@gmail.com";
+        final String to = "   "; //Give  the admin email  address here.
         forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,7 +168,7 @@ public class Login_Activity extends AppCompatActivity {
             startActivity(intent);
 
         } else if ((spref.compareTo("Search By People")) == 0) {
-            Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+            Intent intent = new Intent(getApplicationContext(), SearchPeople.class);
             intent.putExtra("Id", "SearchByPeople");
             intent.putExtra("Uid", userid);
             intent.putExtra("flag", "login");

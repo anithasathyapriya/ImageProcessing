@@ -28,7 +28,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class ImageDetails extends AppCompatActivity {
 
 
-    final static String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    final static String host = "http://52.221.152.166/EventTrace/Service1.svc";
     public Bitmap bitmapimage;
     PhotoViewAttacher attacher;
     String name,imgDec,imgName,relevance,favourite,folder,flag,userid,comment,fullName,preferenceKey="null";
@@ -119,9 +119,9 @@ public class ImageDetails extends AppCompatActivity {
                         if (imgDec.compareTo("null") != 0)
                             tv.setText(imgDec);
                         if(relevance.compareTo("Max")==0)
-                                relevant.setText("Irelevant");
+                                relevant.setText("Exclude Selected");
                         else
-                             relevant.setText("Relevant");
+                             relevant.setText("Include Selected");
                     } catch (JSONException e) {
                         Log.i("JSON", e.getMessage());
                     }

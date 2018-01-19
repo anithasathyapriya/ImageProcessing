@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ListView listview;
     String userid,Sitem,fullName,monthflag = "false",selectedHost = null;
     boolean isFirstBoolean=true;
-    String host = "http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    String host = "http://52.221.152.166/EventTrace/Service1.svc";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item)
     {
-        Intent intent = new Intent(getApplicationContext(), imagesIn_grid.class);
+
         switch (item.getItemId())
         {
             case R.id.item1 :
@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 listview.setOnItemClickListener(MainActivity.this);
                 return  true;
             case R.id.item3 :
+                Intent intent = new Intent(getApplicationContext(), SearchPeople.class);
                 intent.putExtra("Id","SearchByPeople");
                 intent.putExtra("Uid",userid);
                 intent.putExtra("flag","flag");
@@ -150,18 +151,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(intent);
                 return  true;
             case R.id.item4 :
-                intent.putExtra("Id", "Favourite");
-                intent.putExtra("Uid", userid);
-                intent.putExtra("flag", "Favourite");
-                intent.putExtra("FName",fullName);
-                startActivity(intent);
+                Intent intent1 = new Intent(getApplicationContext(), imagesIn_grid.class);
+                intent1.putExtra("Id", "Favourite");
+                intent1.putExtra("Uid", userid);
+                intent1.putExtra("flag", "Favourite");
+                intent1.putExtra("FName",fullName);
+                startActivity(intent1);
                 return  true;
             default:
                 return  super.onOptionsItemSelected(item);
         }
     }
 
-
+ //on click of a row
     public void onItemClick(AdapterView<?> av, View v, int position, long id) {
         ImageClass item = (ImageClass) av.getItemAtPosition(position);
         Intent intent;

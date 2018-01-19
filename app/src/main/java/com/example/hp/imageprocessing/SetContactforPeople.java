@@ -35,7 +35,7 @@ import static com.example.hp.imageprocessing.R.id.contact;
 
 public class SetContactforPeople extends AppCompatActivity {
 
-    final static String host ="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    final static String host ="http://52.221.152.166/EventTrace/Service1.svc";
     public Bitmap bitmapimage;
     Toolbar tb,toolbar;
     Spinner spinner;
@@ -156,8 +156,8 @@ public class SetContactforPeople extends AppCompatActivity {
             if(cName.contains(" "))
                 cName=cName.replaceAll(" ","_");
            // contactName.setText(cName);
-            if((cName.compareTo("null")==0)||(cName.compareTo("Enter Name")==0))
-               Toast.makeText(getApplicationContext(), "Kindly enter a Name", Toast.LENGTH_LONG).show();
+            if((cName.compareTo("null")==0)||(cName.compareTo("Enter_Name")==0)||(cName.isEmpty()))
+                Toast.makeText(getApplicationContext(), "Kindly enter a Name", Toast.LENGTH_LONG).show();
             else {
                 new AsyncTask<Void, Void, JSONObject>() {
                     @Override
@@ -197,7 +197,7 @@ public class SetContactforPeople extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+               Intent intent = new Intent(getApplicationContext(),SearchPeople.class);
                 intent.putExtra("Id", "SearchByPeople");
                 intent.putExtra("Uid", userid);
                 intent.putExtra("flag", "flag");

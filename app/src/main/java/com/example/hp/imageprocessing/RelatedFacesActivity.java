@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class RelatedFacesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    String host="http://192.168.48.247/EventTraceWebAppV1/Service1.svc/SearchRelatedImages";
-    String host1="http://192.168.48.247/EventTraceWebAppV1/Service1.svc";
+    String host="http://52.221.152.166/EventTrace/Service1.svc/SearchRelatedImages";
+    String host1="http://52.221.152.166/EventTrace/Service1.svc";
     public ArrayList<GridImageClass> bitmapclass;
     public ArrayList<String> bitmapNames;
     String imgname,fullName,userid,folder,name,selectHost,selection,imgFullName,preferenceKey="null";
@@ -68,7 +68,7 @@ public class RelatedFacesActivity extends AppCompatActivity implements AdapterVi
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(getApplicationContext(),imagesIn_grid.class);
+                    Intent intent = new Intent(getApplicationContext(),SearchPeople.class);
                     intent.putExtra("Id", "SearchByPeople");
                     intent.putExtra("Uid", userid);
                     intent.putExtra("flag", "flag");
